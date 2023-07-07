@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/naeunkim/.gradle/daemon/8.0/com.example.madcamp_week2.app-mergeDebugResources-54:/layout/activity_main.xml",
+        "source": "/Users/naeunkim/.gradle/daemon/8.0/com.example.madcamp_week2.app-main-57:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.madcamp_week2.app-mergeDebugResources-54:/layout/activity_main.xml",
+        "source": "com.example.madcamp_week2.app-main-57:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/naeunkim/.gradle/daemon/8.0/com.example.madcamp_week2.app-mergeDebugResources-54:/layout/activity_second.xml",
+        "source": "/Users/naeunkim/.gradle/daemon/8.0/com.example.madcamp_week2.app-main-57:/layout/activity_second.xml"
+    }
+]

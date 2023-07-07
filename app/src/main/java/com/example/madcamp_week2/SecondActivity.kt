@@ -6,42 +6,48 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.madcamp_week2.databinding.ActivitySecondBinding
 import com.kakao.sdk.user.UserApiClient
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class SecondActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySecondBinding
+
+    class MyFragmentPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+        val fragments = listOf(OneFragment(), TwoFragment(), ThreeFragment())
+        override fun getItemCount(): Int = fragments.size
+        override fun createFragment(position: Int): Fragment = fragments[position]
+    }
+
+    fun tabSetting(tab: TabLayout.Tab, position: Int) {
+        if (position == 0) {
+            tab.text = "Tab1"
+            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+        } else if (position == 1) {
+            tab.text = "Tab2"
+            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+        } else {
+            tab.text = "Tab3"
+            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+        }
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_second)
+        binding = ActivitySecondBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val kakao_logout_button = findViewById<Button>(R.id.kakao_logout_button) // 로그인 버튼
 
-        kakao_logout_button.setOnClickListener {
-            UserApiClient.instance.logout { error ->
-                if (error != null) {
-                    Toast.makeText(this, "로그아웃 실패 $error", Toast.LENGTH_SHORT).show()
-                }else {
-                    Toast.makeText(this, "로그아웃 성공", Toast.LENGTH_SHORT).show()
-                }
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
-                finish()
-            }
-        }
+        binding.viewpager.adapter = MyFragmentPagerAdapter(this)
+        binding.viewpager.isUserInputEnabled = false
+        TabLayoutMediator(binding.tabs,binding.viewpager){
+                tab, position-> tabSetting(tab, position)
+        }.attach()
 
-        val kakao_unlink_button = findViewById<Button>(R.id.kakao_unlink_button) // 로그인 버튼
-
-        kakao_unlink_button.setOnClickListener {
-            UserApiClient.instance.unlink { error ->
-                if (error != null) {
-                    Toast.makeText(this, "회원 탈퇴 실패 $error", Toast.LENGTH_SHORT).show()
-                }else {
-                    Toast.makeText(this, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
-                    finish()
-                }
-            }
-        }
     }
 
 }

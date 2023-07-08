@@ -4,5 +4,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="social_login_info_naver_client_id">Wf9untwiJVTqvTtbNqVY</string>
     <string name="social_login_info_naver_client_secret">YeGlbmjODR</string>
-    <string name="social_login_info_naver_client_name">rudals9686</string>
+    <string name="social_login_info_naver_client_name">네이버아이디 로그인</string>
 </resources>

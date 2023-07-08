@@ -25,17 +25,24 @@ class MainActivity : AppCompatActivity() {
 
 
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         KakaoSdk.init(this,"f09be48f22f6a3ba7e4839bbab2d9604")
         setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         val naverClientId = getString(R.string.social_login_info_naver_client_id)
         val naverClientSecret = getString(R.string.social_login_info_naver_client_secret)
         val naverClientName = getString(R.string.social_login_info_naver_client_name)
         NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret,naverClientName)
-
-        binding.kakaoLoginButton3.setOnClickListener {
+        val naver_login_button = findViewById<ImageButton>(R.id.kakao_login_button3)
+        naver_login_button.setOnClickListener {
+            Log.d("chchch","naver!!")
             startNaverLogin()
         }
+
+
+
+
+
+
 
 
         // 로그인 정보 확인

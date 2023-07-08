@@ -18,7 +18,10 @@ class SecondActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySecondBinding
 
     class MyFragmentPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+
         val fragments = listOf(OneFragment(), TwoFragment(), ThreeFragment())
+        val fragments = listOf(OneFragment(), TwoFragment(), ThreeFragment(), FourFragment(), FiveFragment())
+
         override fun getItemCount(): Int = fragments.size
         override fun createFragment(position: Int): Fragment = fragments[position]
     }
@@ -32,6 +35,17 @@ class SecondActivity : AppCompatActivity() {
             tab.setIcon(R.drawable.kakao_login_medium_narrow)
         } else {
             tab.text = "Tab3"
+            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+        }
+
+        } else if (position ==2){
+            tab.text = "Tab3"
+            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+        }else if (position ==3) {
+            tab.text = "Tab4"
+            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+        }else{
+            tab.text = "Tab5"
             tab.setIcon(R.drawable.kakao_login_medium_narrow)
         }
 

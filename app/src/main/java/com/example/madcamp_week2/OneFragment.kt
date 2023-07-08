@@ -48,7 +48,7 @@ class OneFragment : Fragment() {
             .build()
 
         val request = Request.Builder()
-            .url("http://172.10.5.168:8000/") // 서버의 주소로 변경해야 함
+            .url("https://7805-192-249-19-234.jp.ngrok.io") // 서버의 주소로 변경해야 함
             .build()
 
         client.newCall(request).enqueue(object : Callback {

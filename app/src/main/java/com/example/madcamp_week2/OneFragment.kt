@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 
 class OneFragment : Fragment() {
@@ -40,9 +41,14 @@ class OneFragment : Fragment() {
     }
 
     private fun checkConnection() {
-        val client = OkHttpClient()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(20, TimeUnit.SECONDS) // Connect Timeout
+            .writeTimeout(20, TimeUnit.SECONDS) // Write Timeout
+            .readTimeout(30, TimeUnit.SECONDS) // Read Timeout
+            .build()
+
         val request = Request.Builder()
-            .url("http://172.10.5.168:443/") // 서버의 주소로 변경해야 함
+            .url("http://172.10.5.168:8000/") // 서버의 주소로 변경해야 함
             .build()
 
         client.newCall(request).enqueue(object : Callback {

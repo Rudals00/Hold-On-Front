@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
-<<<<<<< HEAD
-=======
 import android.widget.TextView
->>>>>>> develop
 import android.widget.Toast
 import com.example.madcamp_week2.databinding.ActivityMainBinding
 import com.kakao.sdk.auth.LoginClient
@@ -109,16 +106,12 @@ class MainActivity : AppCompatActivity() {
 
 
         val kakao_login_button = findViewById<ImageButton>(R.id.kakao_login_button) // 로그인 버튼
-<<<<<<< HEAD
-
-=======
         val trans = findViewById<TextView>(R.id.login_text)
         trans.setOnClickListener{
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
             finish()
         }
->>>>>>> develop
         kakao_login_button.setOnClickListener {
             if(LoginClient.instance.isKakaoTalkLoginAvailable(this)){
                 LoginClient.instance.loginWithKakaoTalk(this, callback = callback)

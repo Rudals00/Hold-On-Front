@@ -1,15 +1,18 @@
 package com.example.madcamp_week2
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import org.json.JSONArray
+import org.json.JSONException
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
 
 /**
  * A simple [Fragment] subclass.
@@ -17,43 +20,73 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class FourFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_four, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_four, container, false)
+        try {
+            initUI(rootView)
+        } catch (e:IOException) {
+            e.printStackTrace()
+        } catch (e:JSONException) {
+            e.printStackTrace()
+        }
+        return rootView
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FourFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FourFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    @Throws(IOException::class, JSONException::class)
+    private fun initUI(rootView: View) {
+        val nameDataset = ArrayList<String>()
+        val locationDataset = ArrayList<String>()
+        val ratingDataset = ArrayList<String>()
+        val imageDataset = ArrayList<String>()
+
+        val istream = requireContext().openFileInput("gym.json")
+        val reader = BufferedReader(InputStreamReader(istream))
+
+        val buffer = StringBuffer()
+        var line = reader.readLine()
+        while (line != null) {
+            buffer.append("$line\n")
+            line = reader.readLine()
+        }
+        istream.close()
+
+        val jsonData = buffer.toString()
+        val jsonArray = JSONArray(jsonData)
+
+        for (i in 0 until jsonArray.length()) {
+            val jo = jsonArray.getJSONObject(i)
+            val name = jo.optString("name", "")
+            val location = jo.optString("location", "")
+            val rating = jo.optString("rating", "")
+            val imgpath = jo.optString("image", "")
+            nameDataset.add(name)
+            locationDataset.add(location)
+            ratingDataset.add(rating)
+            imageDataset.add(imgpath)
+        }
+
+        val recyclerView = rootView.findViewById<RecyclerView>(R.id.fragfour_recyclerView)
+
+        val layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = layoutManager
+
+        val customAdapter = MapCustomAdapter(nameDataset, locationDataset, ratingDataset, imageDataset)
+
+        //click event implementation
+        customAdapter.setOnItemClickListener(object : MapCustomAdapter.OnItemClickListener {
+            override fun onItemClicked(position: Int, data: String) {
+                val intent = Intent(requireContext(), GymInfoActivity::class.java)
+                startActivity(intent)
             }
+        })
+        recyclerView.adapter = customAdapter
     }
 }

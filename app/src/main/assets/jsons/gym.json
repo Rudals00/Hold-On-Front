@@ -1,0 +1,5 @@
+[
+  {"name": "서울숲 뚝섬", "location":  "서울특별시 성동구 성수일로 19", "rating":  "4.75", "image": "@drawable/seoulforest_ts"},
+  {"name": "PEAKERS 클라이밍 종로", "location":  "서울특별시 종로구 돈화문로5가길 1", "rating": "4.5", "image": "@drawable/peakers_guro"},
+  {"name": "락랜드", "location":  "서울특별시 강북구 도봉로 315", "rating" : "4.6", "image": "@drawable/rockland"}
+]

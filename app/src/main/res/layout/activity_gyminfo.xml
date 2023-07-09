@@ -1,7 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <ImageView
+                android:id="@+id/info_gymimage"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/seoulforest_ts"/>
+
+            <TextView
+                android:id="@+id/info_gymname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="서울숲 클라이밍 뚝섬"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/info_gymlocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="서울특별시 성동구 성수일로 19 지하 2층"
+                android:textSize="15dp"
+                android:gravity="center" />
+
+            <net.daum.mf.map.api.MapView
+                android:id="@+id/info_mapview"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="방문자 리뷰"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="20dp"
+                            android:layout_gravity="center"/>
+
+                        <RatingBar
+                            android:id="@+id/info_ratingbar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:numStars="5"
+                            android:stepSize="0.01"
+                            android:progressTint="#fe6f21"
+                            android:max="5"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            style="@style/Widget.AppCompat.RatingBar.Small"/>
+
+                         <TextView
+                            android:id="@+id/info_rating"
+                            android:layout_width="50dp"
+                            android:layout_height="45dp"
+                            android:gravity="center"
+                            android:text="(5.0)"
+                            android:textSize="13dp"/>
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/info_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

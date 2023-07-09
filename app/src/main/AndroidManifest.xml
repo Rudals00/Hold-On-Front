@@ -42,6 +42,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GymInfoActivity" />
+        <activity android:name="GymInfoActivity" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="d5c87f40fc2b2940c0d0add8abd58755"/>
     </application>
 </manifest>

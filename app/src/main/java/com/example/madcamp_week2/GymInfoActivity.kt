@@ -2,11 +2,12 @@ package com.example.madcamp_week2
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import net.daum.android.map.MapView
+import net.daum.mf.map.api.MapView
 
 class GymInfoActivity: AppCompatActivity() {
     private lateinit var mapView: MapView
@@ -45,10 +46,11 @@ class GymInfoActivity: AppCompatActivity() {
             }
         }
 
-        //지도 정보 표시
-        mapView = findViewById(R.id.info_mapview)
-
-        //지도 이벤트 리스너 설정
-
+        //리뷰 작성 버튼
+        val addReviewButton = findViewById<ImageButton>(R.id.new_review_button)
+        addReviewButton.setOnClickListener {
+            val intent = Intent(this, AddReviewActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

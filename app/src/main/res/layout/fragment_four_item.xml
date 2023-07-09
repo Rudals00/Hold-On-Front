@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="3dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp"
     app:cardElevation="10dp">
 
     <LinearLayout
@@ -30,7 +33,6 @@
             <LinearLayout
                 android:layout_width="250dp"
                 android:layout_height="132dp"
-                android:layout_marginStart="10dp"
                 android:orientation="vertical"
                 android:layout_gravity="center"
                 android:padding="10dp">
@@ -40,7 +42,7 @@
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:text="gym_name"
-                    android:textSize="25dp"
+                    android:textSize="20dp"
                     android:maxLines="1"
                     android:ellipsize="end"
                     tools:ignore="ExtraText" />
@@ -51,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="location"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:maxLines="1"
                     android:ellipsize="end" />
 
@@ -62,13 +64,14 @@
 
                     <RatingBar
                         android:id="@+id/ratingBar"
-                        android:layout_width="180dp"
-                        android:layout_marginTop="3dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:numStars="5"
-                        android:stepSize="0.5"
+                        android:stepSize="0.01"
+                        android:progressTint="#fe6f21"
                         android:max="5"
-                        style="@style/Widget.AppCompat.RatingBar.Indicator"/>
+                        android:layout_gravity="center"
+                        style="@style/Widget.AppCompat.RatingBar.Small"/>
 
                     <TextView
                         android:id="@+id/rating"
@@ -76,17 +79,16 @@
                         android:layout_height="45dp"
                         android:gravity="center"
                         android:text="(5.0)"
-                        android:textSize="15dp"/>
+                        android:textSize="13dp"/>
                 </LinearLayout>
 
 
+            </LinearLayout>
+
+
+
+
         </LinearLayout>
-        
-
-
-
-        </LinearLayout>
-
 
 
 

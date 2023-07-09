@@ -12,12 +12,11 @@
         android:layout_height="wrap_content"
         android:text="클라이밍장"
         android:textSize="20sp"
-        android:textStyle="bold"
         android:gravity="center"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragfour_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

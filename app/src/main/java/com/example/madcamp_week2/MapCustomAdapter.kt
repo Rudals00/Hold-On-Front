@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RatingBar
 import android.widget.TextView
+import androidx.compose.ui.geometry.Offset
 
 class MapCustomAdapter(
     private val nameDataSet: ArrayList<String>,
@@ -36,12 +38,21 @@ class MapCustomAdapter(
     }
 
     inner class ViewHolder(itemView: View, private val adapter: MapCustomAdapter) : RecyclerView.ViewHolder(itemView) {
+
         val imageView: ImageView = itemView.findViewById(R.id.fragfour_imageview)
         val gymname: TextView = itemView.findViewById(R.id.fragfour_gymname)
         val location: TextView = itemView.findViewById(R.id.fragfour_location)
         val rating: TextView = itemView.findViewById(R.id.rating)
-        val contactRecyclerView: LinearLayout = itemView.findViewById(R.id.fragfour_recyclerView)
+        val rating_: RatingBar = itemView.findViewById(R.id.ratingBar)
+        val contactRecyclerView: LinearLayout = itemView.findViewById(R.id.fragfour_recyclerview)
 
+        fun bind(ratingValue: String) {
+            rating_.rating = ratingValue.toFloatOrNull() ?:0f
+
+            rating_.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { _, newRating, _ ->
+                //변경된 ratingbar 값 처리
+            }
+        }
         init {
             contactRecyclerView.setOnClickListener {
                 val position = adapterPosition
@@ -69,6 +80,9 @@ class MapCustomAdapter(
         val rating = ratingDataSet[position]
         holder.rating.text = rating
 
+        val ratingValue = ratingDataSet[position]
+        holder.bind(ratingValue)
+
         val image = imageDataSet[position]
 
         val context = holder.itemView.context
@@ -84,7 +98,7 @@ class MapCustomAdapter(
 
             contactActivity.putExtra("name", name)
             contactActivity.putExtra("location", location)
-            contactActivity.putExtra("rating", rating)
+            contactActivity.putExtra("rating", ratingValue)
             contactActivity.putExtra("image", image)
 
             context.startActivity(contactActivity)

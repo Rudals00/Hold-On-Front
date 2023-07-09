@@ -6,11 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.jetbrains.annotations.Nullable
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.BufferedReader
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
 
@@ -21,7 +26,7 @@ import java.io.InputStreamReader
  */
 class FourFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
@@ -30,13 +35,7 @@ class FourFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_four, container, false)
-        try {
-            initUI(rootView)
-        } catch (e:IOException) {
-            e.printStackTrace()
-        } catch (e:JSONException) {
-            e.printStackTrace()
-        }
+        initUI(rootView)
         return rootView
     }
 
@@ -47,38 +46,29 @@ class FourFragment : Fragment() {
         val ratingDataset = ArrayList<String>()
         val imageDataset = ArrayList<String>()
 
-        val istream = requireContext().openFileInput("gym.json")
-        val reader = BufferedReader(InputStreamReader(istream))
+        nameDataset.add("서울숲 뚝섬")
+        nameDataset.add("PEAKERS 클라이밍 종로")
+        nameDataset.add("락랜드")
+        locationDataset.add("서울특별시 성동구 성수일로 19")
+        locationDataset.add("서울특별시 종로구 돈화문로5가길 1")
+        locationDataset.add("서울특별시 강북구 도봉로 315")
+        ratingDataset.add("4.75")
+        ratingDataset.add("4.5")
+        ratingDataset.add("4.6")
+        imageDataset.add("@drawable/seoulforest_ts")
+        imageDataset.add("@drawable/peakers_guro")
+        imageDataset.add("@drawable/rockland")
 
-        val buffer = StringBuffer()
-        var line = reader.readLine()
-        while (line != null) {
-            buffer.append("$line\n")
-            line = reader.readLine()
-        }
-        istream.close()
-
-        val jsonData = buffer.toString()
-        val jsonArray = JSONArray(jsonData)
-
-        for (i in 0 until jsonArray.length()) {
-            val jo = jsonArray.getJSONObject(i)
-            val name = jo.optString("name", "")
-            val location = jo.optString("location", "")
-            val rating = jo.optString("rating", "")
-            val imgpath = jo.optString("image", "")
-            nameDataset.add(name)
-            locationDataset.add(location)
-            ratingDataset.add(rating)
-            imageDataset.add(imgpath)
-        }
-
+        //리사이클러뷰 초기화
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.fragfour_recyclerView)
-
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView.layoutManager = layoutManager
 
+        //RatingBar 초기화
+        val ratingBar = rootView.findViewById<RatingBar>(R.id.ratingBar)
+
         val customAdapter = MapCustomAdapter(nameDataset, locationDataset, ratingDataset, imageDataset)
+        recyclerView.adapter = customAdapter
 
         //click event implementation
         customAdapter.setOnItemClickListener(object : MapCustomAdapter.OnItemClickListener {
@@ -87,6 +77,25 @@ class FourFragment : Fragment() {
                 startActivity(intent)
             }
         })
-        recyclerView.adapter = customAdapter
+
     }
+
+//    @Throws(IOException::class)
+//    private fun copyAssetFileToInternalStorage(fileName: String) {
+//        val assetManager = requireContext().assets
+//        val inputStream = assetManager.open(fileName)
+//        val outputFile = File(requireContext().filesDir, fileName)
+//        val outputStream = FileOutputStream(outputFile)
+//
+//        val buffer = ByteArray(1024)
+//        var read: Int = inputStream.read(buffer)
+//        while (read != -1) {
+//            outputStream.write(buffer, 0, read)
+//            read = inputStream.read(buffer)
+//        }
+//
+//        outputStream.flush()
+//        outputStream.close()
+//        inputStream.close()
+//    }
 }

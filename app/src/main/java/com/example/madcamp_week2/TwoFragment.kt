@@ -5,55 +5,170 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.PopupMenu
+import android.widget.Spinner
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.madcamp_week2.databinding.FragmentOneBinding
+import com.example.madcamp_week2.databinding.FragmentTwoBinding
+import com.example.madcamp_week2.databinding.GroupRecyclerviewBinding
+import com.example.madcamp_week2.databinding.PostRecyclerviewBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+data class Group(
+    val area: String,
+    val title: String,
+    val maximmum: Int,
+    var current: Int
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TwoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class TwoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+)
+interface OnGroupItemClickedListener {
+    fun onGroupClick(group: Group)
+}
+class TwoViewHolder(val binding: GroupRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+class GroupAdapter(private val datas:MutableList<Group>, private val listener: OnGroupItemClickedListener) : RecyclerView.Adapter<TwoViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TwoViewHolder {
+        val itemBinding = GroupRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TwoViewHolder(itemBinding)
+    }
+
+    override fun onBindViewHolder(holder: TwoViewHolder, position: Int) {
+        val binding = (holder as TwoViewHolder).binding
+        binding.groupTitle.text = datas[position].title
+        binding.area.text = datas[position].area
+        binding.current.text = datas[position].current.toString()+"/"
+        binding.maximum.text = datas[position].maximmum.toString()
+
+
+        holder.itemView.setOnClickListener {
+            val group = datas[position]
+            listener.onGroupClick(group)
         }
     }
+
+    override fun getItemCount() = datas.size
+}
+
+class TwoFragment : Fragment(), OnGroupItemClickedListener{
+    val datas = mutableListOf<Group>()
+    private lateinit var binding: FragmentTwoBinding
+    private var groupAdapter: GroupAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_two, container, false)
+        binding = FragmentTwoBinding.inflate(inflater, container, false)
+        groupAdapter = GroupAdapter(datas, this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = groupAdapter
+
+        val areaSpinner: Spinner = binding.areaSpinner
+        val areas = arrayOf("강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구",
+            "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구",
+            "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구",
+            "중랑구")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, areas)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        areaSpinner.adapter = adapter
+
+        areaSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedArea = parent.getItemAtPosition(position).toString()
+                // 선택된 구를 처리하는 로직을 여기에 작성하세요.
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 선택이 해제될 때의 처리 로직을 여기에 작성하세요.
+            }
+        }
+        val maximumSpinner: Spinner = binding.maximumSpinner
+        val maximum= Array(50) { i -> (i + 1).toString() }  // 1부터 50까지의 숫자를 생성합니다.
+        val maximumSpinnertAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, maximum)
+        maximumSpinnertAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        maximumSpinner.adapter = maximumSpinnertAdapter
+
+        maximumSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedMemberCount = parent.getItemAtPosition(position).toString().toInt()
+                // 선택된 모집 인원 수를 처리하는 로직을 여기에 작성하세요.
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 선택이 해제될 때의 처리 로직을 여기에 작성하세요.
+            }
+        }
+        binding.backButton.setOnClickListener{
+            binding.groupNameText.setText("")
+            binding.groupAboutText.setText("")
+            binding.areaSpinner.setSelection(0)
+            binding.maximumSpinner.setSelection(0)
+            binding.makeGroup.visibility=View.GONE
+            binding.toolbar.visibility=View.VISIBLE
+            binding.recyclerView.visibility=View.VISIBLE
+            binding.addButton.visibility=View.VISIBLE
+        }
+        binding.backButtonDetail.setOnClickListener{
+            binding.groupInfo.visibility=View.GONE
+            binding.makeGroup.visibility=View.GONE
+            binding.toolbar.visibility=View.VISIBLE
+            binding.recyclerView.visibility=View.VISIBLE
+            binding.addButton.visibility=View.VISIBLE
+        }
+        binding.addImage.setOnClickListener{
+            //갤러리에서 이미지 uri받아오기
+        }
+        binding.complete.setOnClickListener{
+            // 완료누르면 정보들 group database에 넣기
+            binding.groupNameText.setText("")
+            binding.groupAboutText.setText("")
+            binding.areaSpinner.setSelection(0)
+            binding.maximumSpinner.setSelection(0)
+            binding.makeGroup.visibility=View.GONE
+            binding.toolbar.visibility=View.VISIBLE
+            binding.recyclerView.visibility=View.VISIBLE
+            binding.addButton.visibility=View.VISIBLE
+        }
+
+        binding.addButton.setOnClickListener{
+            val popupMenu = PopupMenu(requireContext(), binding.addButton)
+            popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.make_group ->makeGroup()
+                    R.id.join_group ->joinGroup()
+                }
+                true
+            }
+            popupMenu.show()
+        }
+        datas.add(Group("Area 1", "Title 1", 5, 2))
+        datas.add(Group("Area 2", "Title 2", 10, 3))
+        datas.add(Group("Area 3", "Title 3", 8, 7))
+        datas.add(Group("Area 4", "Title 4", 12, 6))
+
+        return binding.root
+    }
+    override fun onGroupClick(group: Group) {
+        binding.groupInfo.visibility=View.VISIBLE
+        binding.makeGroup.visibility=View.GONE
+        binding.toolbar.visibility=View.GONE
+        binding.recyclerView.visibility=View.GONE
+        binding.addButton.visibility=View.GONE
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TwoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TwoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
+
+    private fun joinGroup() {
+
+    }
+
+    private fun makeGroup() {
+        binding.makeGroup.visibility=View.VISIBLE
+        binding.toolbar.visibility=View.GONE
+        binding.recyclerView.visibility=View.GONE
+        binding.addButton.visibility=View.GONE
     }
 }

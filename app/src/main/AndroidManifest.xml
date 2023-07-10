@@ -47,6 +47,7 @@
         </activity>
         <activity android:name="GymInfoActivity" />
         <activity android:name="AddReviewActivity" />
+        <activity android:name=".SettingsActivity" />
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="d5c87f40fc2b2940c0d0add8abd58755"/>

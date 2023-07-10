@@ -22,9 +22,6 @@ class ThreeFragment : Fragment() {
 
 
 
-
-
-
         return binding.root
     }
 }

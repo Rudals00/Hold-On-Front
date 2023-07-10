@@ -1,5 +1,7 @@
 package com.example.madcamp_week2
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -58,6 +60,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
     val datas = mutableListOf<Group>()
     private lateinit var binding: FragmentTwoBinding
     private var groupAdapter: GroupAdapter? = null
+    private val PICK_IMAGE_REQUEST = 101
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -134,7 +137,11 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
             binding.recyclerView.visibility=View.VISIBLE
             binding.addButton.visibility=View.VISIBLE
         }
-
+        binding.addImage.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        }
         binding.addButton.setOnClickListener{
             val popupMenu = PopupMenu(requireContext(), binding.addButton)
             popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
@@ -190,7 +197,15 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
             }
         })
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val uri = data.data
 
+            // Here you can use the uri to create a File object, open an input stream, etc.
+            // ...
+        }
+    }
     private fun makeGroup() {
         binding.makeGroup.visibility=View.VISIBLE
         binding.toolbar.visibility=View.GONE

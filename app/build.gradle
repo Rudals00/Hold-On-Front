@@ -48,6 +48,7 @@ android {
     viewBinding{
         enabled = true
     }
+
 }
 
 dependencies {
@@ -84,5 +85,6 @@ dependencies {
     //kakao map api
     implementation fileTree(include: ['*.jar'], dir:'libs')
     implementation files('libs/libDaumMapAndroid.jar')
+
 
 }

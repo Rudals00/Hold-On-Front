@@ -19,7 +19,9 @@ class MapCustomAdapter(
     private val nameDataSet: ArrayList<String>,
     private val locationDataSet: ArrayList<String>,
     private val ratingDataSet: ArrayList<String>,
-    private val imageDataSet: ArrayList<String>
+    private val imageDataSet: ArrayList<String>,
+    private val latitudeDataSet: ArrayList<Double>,
+    private val longitudeDataSet: ArrayList<Double>
 ) : RecyclerView.Adapter<MapCustomAdapter.ViewHolder>() {
 
     // click event implementation
@@ -77,6 +79,9 @@ class MapCustomAdapter(
         val location = locationDataSet[position]
         holder.location.text = location
 
+        val latitude = latitudeDataSet[position]
+        val longitude = longitudeDataSet[position]
+
         val rating = ratingDataSet[position]
         holder.rating.text = rating
 
@@ -94,14 +99,16 @@ class MapCustomAdapter(
         holder.contactRecyclerView.setOnClickListener {
             val context = it.context
 
-            val contactActivity = Intent(context, GymInfoActivity::class.java)
+            val infoActivity = Intent(context, GymInfoActivity::class.java)
 
-            contactActivity.putExtra("name", name)
-            contactActivity.putExtra("location", location)
-            contactActivity.putExtra("rating", ratingValue)
-            contactActivity.putExtra("image", image)
+            infoActivity.putExtra("name", name)
+            infoActivity.putExtra("location", location)
+            infoActivity.putExtra("rating", ratingValue)
+            infoActivity.putExtra("image", image)
+            infoActivity.putExtra("latitude", latitude)
+            infoActivity.putExtra("longitude",longitude)
 
-            context.startActivity(contactActivity)
+            context.startActivity(infoActivity)
         }
     }
 

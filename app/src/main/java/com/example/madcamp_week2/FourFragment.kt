@@ -14,9 +14,15 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week2.databinding.FragmentTwoBinding
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import org.jetbrains.annotations.Nullable
 import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
@@ -29,6 +35,12 @@ import java.io.InputStreamReader
  * create an instance of this fragment.
  */
 class FourFragment : Fragment() {
+    private val nameDataset = ArrayList<String>()
+    private val locationDataset = ArrayList<String>()
+    private val latitudeDataset = ArrayList<Double>()
+    private val longitudeDataset = ArrayList<Double>()
+    private val ratingDataset = ArrayList<String>()
+    private val imageDataset = ArrayList<String>()
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +51,6 @@ class FourFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_four, container, false)
-        initUI(rootView)
 
         val areaSpinner = rootView.findViewById<Spinner>(R.id.fragfour_areaSpinner)
 
@@ -62,66 +73,95 @@ class FourFragment : Fragment() {
                 // 선택이 해제될 때의 처리 로직을 여기에 작성하세요.
             }
         }
+        initUI(rootView)
         return rootView
     }
 
-    @Throws(IOException::class, JSONException::class)
     private fun initUI(rootView: View) {
-        val nameDataset = ArrayList<String>()
-        val locationDataset = ArrayList<String>()
-        val ratingDataset = ArrayList<String>()
-        val imageDataset = ArrayList<String>()
+        //서버 엔드포인트 url
+        val url = "https://cc13-192-249-19-234.jp.ngrok.io/gymData"
 
-        nameDataset.add("서울숲 뚝섬")
-        nameDataset.add("PEAKERS 클라이밍 종로")
-        nameDataset.add("락랜드")
-        locationDataset.add("서울특별시 성동구 성수일로 19")
-        locationDataset.add("서울특별시 종로구 돈화문로5가길 1")
-        locationDataset.add("서울특별시 강북구 도봉로 315")
-        ratingDataset.add("4.75")
-        ratingDataset.add("4.5")
-        ratingDataset.add("4.6")
-        imageDataset.add("@drawable/seoulforest_ts")
-        imageDataset.add("@drawable/peakers_guro")
-        imageDataset.add("@drawable/rockland")
+        //OkHttpClient 생성
+        val client = OkHttpClient()
 
-        //리사이클러뷰 초기화
-        val recyclerView = rootView.findViewById<RecyclerView>(R.id.fragfour_recyclerView)
-        val layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.layoutManager = layoutManager
+        //Get 요청 생성
+        val request = Request.Builder().url(url).build()
 
-        //RatingBar 초기화
-        val ratingBar = rootView.findViewById<RatingBar>(R.id.ratingBar)
+        //요청 전송
+        client.newCall(request).enqueue(object: Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                //요청 실패 처리
+                //예외 처리 혹은 오류 메세지 표시
+                requireActivity().runOnUiThread {
+                    Toast.makeText(requireContext(), "서버에 연결할 수 없습니다",Toast.LENGTH_SHORT).show()
+                }
+            }
 
-        val customAdapter = MapCustomAdapter(nameDataset, locationDataset, ratingDataset, imageDataset)
-        recyclerView.adapter = customAdapter
+            override fun onResponse(call: Call, response: Response) {
+                //응답 처리
+                val responseBody = response.body?.string()
 
-        //click event implementation
-        customAdapter.setOnItemClickListener(object : MapCustomAdapter.OnItemClickListener {
-            override fun onItemClicked(position: Int, data: String) {
-                val intent = Intent(requireContext(), GymInfoActivity::class.java)
-                startActivity(intent)
+                try {
+                    //JSON 데이터 파싱
+                    val jsonArray = JSONArray(responseBody)
+                    for(i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        //필요한 데이터 추출
+                        val gymName = jsonObject.getString("gym_name")
+                        val gymAddress = jsonObject.getString("gym_address")
+                        val latitude = jsonObject.getDouble("latitude")
+                        val longitude = jsonObject.getDouble("longitude")
+
+                        nameDataset.add(gymName)
+                        locationDataset.add(gymAddress)
+                        latitudeDataset.add(latitude)
+                        longitudeDataset.add(longitude)
+                        ratingDataset.add("4.7") //이후 rating 받아와서 .add(rating.toString())
+                        imageDataset.add("@drawable/seoulforest_ts") //이후 이미지 받아와서 imagePath 추가
+                    }
+
+                    //ui 업데이트
+                    requireActivity().runOnUiThread {
+                        //리사이클러뷰 초기화
+                        val recyclerView = rootView.findViewById<RecyclerView>(R.id.fragfour_recyclerView)
+                        val layoutManager = LinearLayoutManager(requireContext())
+                        recyclerView.layoutManager = layoutManager
+
+                        //RatingBar 초기화
+                        val ratingBar = rootView.findViewById<RatingBar>(R.id.ratingBar)
+
+                        val customAdapter = MapCustomAdapter(nameDataset, locationDataset, ratingDataset, imageDataset, latitudeDataset, longitudeDataset)
+                        recyclerView.adapter = customAdapter
+
+                        //click event implementation
+                        customAdapter.setOnItemClickListener(object : MapCustomAdapter.OnItemClickListener {
+                            override fun onItemClicked(position: Int, data: String) {
+                                val intent = Intent(requireContext(), GymInfoActivity::class.java)
+                                startActivity(intent)
+                            }
+                        })
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    requireActivity().runOnUiThread {
+                        Toast.makeText(requireContext(), "데이터를 파싱하는데 실패했습니다", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         })
 
-    }
+//        nameDataset.add("서울숲 뚝섬")
+//        nameDataset.add("PEAKERS 클라이밍 종로")
+//        nameDataset.add("락랜드")
+//        locationDataset.add("서울특별시 성동구 성수일로 19")
+//        locationDataset.add("서울특별시 종로구 돈화문로5가길 1")
+//        locationDataset.add("서울특별시 강북구 도봉로 315")
+//        ratingDataset.add("4.75")
+//        ratingDataset.add("4.5")
+//        ratingDataset.add("4.6")
+//        imageDataset.add("@drawable/seoulforest_ts")
+//        imageDataset.add("@drawable/peakers_guro")
+//        imageDataset.add("@drawable/rockland")
 
-//    @Throws(IOException::class)
-//    private fun copyAssetFileToInternalStorage(fileName: String) {
-//        val assetManager = requireContext().assets
-//        val inputStream = assetManager.open(fileName)
-//        val outputFile = File(requireContext().filesDir, fileName)
-//        val outputStream = FileOutputStream(outputFile)
-//
-//        val buffer = ByteArray(1024)
-//        var read: Int = inputStream.read(buffer)
-//        while (read != -1) {
-//            outputStream.write(buffer, 0, read)
-//            read = inputStream.read(buffer)
-//        }
-//
-//        outputStream.flush()
-//        outputStream.close()
-//        inputStream.close()
-//    }
+    }
 }

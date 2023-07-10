@@ -9,6 +9,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Spinner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week2.databinding.FragmentOneBinding
@@ -144,6 +147,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
             }
             popupMenu.show()
         }
+
         datas.add(Group("Area 1", "Title 1", 5, 2))
         datas.add(Group("Area 2", "Title 2", 10, 3))
         datas.add(Group("Area 3", "Title 3", 8, 7))
@@ -152,6 +156,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
         return binding.root
     }
     override fun onGroupClick(group: Group) {
+        binding.groupDatailName.text = group.title
         binding.groupInfo.visibility=View.VISIBLE
         binding.makeGroup.visibility=View.GONE
         binding.toolbar.visibility=View.GONE
@@ -162,7 +167,28 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
 
 
     private fun joinGroup() {
+        val JoinGroupFragment = JoinGroupFragment()
+        val fragmentManager = requireActivity().supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        binding.fragmentContainerJoin.visibility = View.VISIBLE
+        binding.makeGroup.visibility=View.GONE
+        binding.toolbar.visibility=View.GONE
+        binding.recyclerView.visibility=View.GONE
+        binding.addButton.visibility=View.GONE
+        transaction.replace(R.id.fragment_container_Join, JoinGroupFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
 
+        JoinGroupFragment.lifecycle.addObserver(object : LifecycleObserver {
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            fun onFragmentDestroyed() {
+                binding.fragmentContainerJoin.visibility = View.GONE
+                binding.makeGroup.visibility = View.GONE
+                binding.toolbar.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.addButton.visibility = View.VISIBLE
+            }
+        })
     }
 
     private fun makeGroup() {

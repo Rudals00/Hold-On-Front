@@ -21,7 +21,11 @@ import com.example.madcamp_week2.databinding.PostRecyclerviewBinding
 import kotlinx.parcelize.Parcelize
 import java.lang.Math.min
 
-
+@Parcelize
+data class Comment(
+    val userNickname: String,
+    val commentText: String
+): Parcelable
 @Parcelize
 data class Post(
     val postId: Int,
@@ -33,7 +37,8 @@ data class Post(
     val postVideoPath: String?,
     val postUploadTime: String,
     var likeCount: Int,
-    var commentCount: Int
+    var commentCount: Int,
+    val comments: List<Comment> = listOf()
 ): Parcelable
 class MyViewHolder(val binding: PostRecyclerviewBinding,var selectedCategory: String?) : RecyclerView.ViewHolder(binding.root)
 {
@@ -218,9 +223,13 @@ class OneFragment : Fragment() {
                 0)
         )// 로고를 위한 dummy data
         // 데이터 추가 예시
-        datas.add(Post(1, 1, "UserNickname1", "Category1", "PostText1", null, null, "UploadTime1", 0, 0))
-        datas.add(Post(2, 2, "UserNickname2", "Category2", "PostText2", null, null, "UploadTime2", 0, 0))
-        datas.add(Post(2, 2, "UserNickname3", "Category3", "PostText3", null, null, "UploadTime3", 0, 0))
+        val comments = listOf(
+            Comment("User1", "Great post!"),
+            Comment("User2", "Nice work!")
+        )
+        datas.add(Post(1, 1, "UserNickname1", "Category1", "PostText1", null, null, "UploadTime1", 0, 0,comments))
+        datas.add(Post(2, 2, "UserNickname2", "Category2", "PostText2", null, null, "UploadTime2", 0, 0,comments))
+        datas.add(Post(2, 2, "UserNickname3", "Category3", "PostText3", null, null, "UploadTime3", 0, 0,comments))
 
 
 

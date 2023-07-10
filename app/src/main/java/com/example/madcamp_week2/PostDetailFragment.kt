@@ -12,7 +12,36 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madcamp_week2.databinding.FragmentPostDetailBinding
+class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+    private var comments: List<Comment> = listOf()
 
+    inner class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val userNickname: TextView = itemView.findViewById(R.id.commentUserNickname)
+        private val commentText: TextView = itemView.findViewById(R.id.commentText)
+
+        fun bind(comment: Comment) {
+            userNickname.text = comment.userNickname
+            commentText.text = comment.commentText
+        }
+    }
+
+    fun setComments(comments: List<Comment>) {
+        this.comments = comments
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.comment_item, parent, false)
+        return CommentViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
+        val comment = comments[position]
+        holder.bind(comment)
+    }
+
+    override fun getItemCount(): Int = comments.size
+}
 class ImageAdapter1 : RecyclerView.Adapter<ImageAdapter1.ImageViewHolder1>() {
     private var images: List<String> = listOf()
 
@@ -39,6 +68,7 @@ class ImageAdapter1 : RecyclerView.Adapter<ImageAdapter1.ImageViewHolder1>() {
 
 class PostDetailFragment : Fragment() {
     private lateinit var binding: FragmentPostDetailBinding
+    private lateinit var commentRecyclerView: RecyclerView
     private lateinit var post: Post // Post is your post data model.
     private lateinit var backButton: ImageView
     private lateinit var postText: TextView
@@ -74,6 +104,7 @@ class PostDetailFragment : Fragment() {
         uploadTime = binding.uploadTimeTextView
         commentCount = binding.commentCountTextView
         likeCount = binding.likeCountTextView
+        commentRecyclerView = binding.commentRecyclerView
 
         postText.text = post.postText
         userNickname.text = post.userNickname
@@ -96,6 +127,12 @@ class PostDetailFragment : Fragment() {
             }
         } ?: run {
             postImages.visibility = View.GONE
+        }
+        post.comments?.let {
+            val commentAdapter = CommentAdapter()
+            commentRecyclerView.layoutManager = LinearLayoutManager(context)
+            commentRecyclerView.adapter = commentAdapter
+            commentAdapter.setComments(it)
         }
 
         // Set click listener for back button

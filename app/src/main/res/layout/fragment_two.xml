@@ -4,6 +4,12 @@
     android:id="@+id/post_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/fragment_container_Join"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility = "gone"/>
     <LinearLayout
         android:id="@+id/make_group"
         android:layout_width="match_parent"
@@ -152,8 +158,8 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
-            android:id="@+id/logo"
-            android:layout_width="20dp"
+            android:id="@+id/group_datail_name"
+            android:layout_width="wrap_content"
             android:layout_height="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

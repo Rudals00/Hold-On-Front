@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="방문 후기"
+                    android:hint="방문 후기"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="20sp" />
             </androidx.cardview.widget.CardView>
@@ -126,12 +126,4 @@
             android:text="등록하기"
             android:textSize="17sp" />
     </LinearLayout>
-
-
-
-
-
-
-
-
 </LinearLayout>

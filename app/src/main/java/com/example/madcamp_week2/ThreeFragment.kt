@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.madcamp_week2.databinding.FragmentThreeBinding
 import com.kakao.sdk.user.UserApiClient
 
@@ -24,16 +25,17 @@ class ThreeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentThreeBinding.inflate(inflater, container, false)
-        binding.backButton.setOnClickListener{
+        binding.backButton.setOnClickListener {
             binding.inputPost.setText("")
 
         }
-        binding.galleryButton.setOnClickListener{
-            val intent = Intent(Intent.ACTION_PICK)
+        binding.galleryButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
-        binding.complete.setOnClickListener{
+        binding.complete.setOnClickListener {
 
         }
 
@@ -44,7 +46,12 @@ class ThreeFragment : Fragment() {
         categorySpinner.adapter = adapter
 
         categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
                 val selectedCategory = parent.getItemAtPosition(position).toString()
                 // 선택된 구를 처리하는 로직을 여기에 작성하세요.
             }
@@ -57,13 +64,20 @@ class ThreeFragment : Fragment() {
 
         return binding.root
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-            val uri = data.data
-
-            // Here you can use the uri to create a File object, open an input stream, etc.
-            // ...
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            if (data.clipData != null) { // handle multiple images
+                val count = data.clipData!!.itemCount
+                for (i in 0 until count) {
+                    val imageUri = data.clipData!!.getItemAt(i).uri
+                    // Use imageUri as you want
+                }
+            } else if (data.data != null) { // handle single image
+                val imageUri = data.data
+                // Use imageUri as you want
+            }
         }
     }
 }

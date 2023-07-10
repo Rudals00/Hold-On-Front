@@ -43,7 +43,14 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+        val naverAccessToken = NaverIdLoginSDK.getAccessToken()
+        if (naverAccessToken != null) {
+            // User already logged in
+            Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, joinmemberShipActivity::class.java)
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            finish()
+        }
 
 
         // 로그인 정보 확인
@@ -53,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             }
             else if (tokenInfo != null) {
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, SecondActivity::class.java)
+                val intent = Intent(this, joinmemberShipActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
             }
@@ -98,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             }
             else if (token != null) {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, SecondActivity::class.java)
+                val intent = Intent(this, joinmemberShipActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
             }
@@ -108,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         val kakao_login_button = findViewById<ImageButton>(R.id.kakao_login_button) // 로그인 버튼
         val trans = findViewById<TextView>(R.id.login_text)
         trans.setOnClickListener{
-            val intent = Intent(this, SecondActivity::class.java)
+            val intent = Intent(this, joinmemberShipActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
             finish()
         }
@@ -130,6 +137,9 @@ class MainActivity : AppCompatActivity() {
                 val userId = response.profile?.id
 //                binding.tvResult.text = "id: ${userId} \ntoken: ${naverToken}"
                 Toast.makeText(this@MainActivity, "네이버 아이디 로그인 성공!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@MainActivity, joinmemberShipActivity::class.java)
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                finish()
             }
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code

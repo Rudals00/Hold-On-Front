@@ -48,8 +48,8 @@ class AddReviewActivity: AppCompatActivity() {
         //등록하기 버튼에 클릭 리스너 설정
         buttonRegister.setOnClickListener {
             registerReview()
-            val intent = Intent(this, GymInfoActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, GymInfoActivity::class.java)
+//            startActivity(intent)
         }
     }
 
@@ -97,8 +97,11 @@ class AddReviewActivity: AppCompatActivity() {
                     //메인 스레드에서 동작하는 코드 블록을 생성
                     runOnUiThread {
                         Toast.makeText(this@AddReviewActivity, "Review register successful!", Toast.LENGTH_LONG).show()
-                        val intent = Intent(this@AddReviewActivity, GymInfoActivity::class.java)
-                        startActivity(intent)
+                        val intent = Intent()
+                        intent.putExtra("rating", userRating)
+                        intent.putExtra("review_text", review_text)
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
                     }
                 } else {
                     runOnUiThread {

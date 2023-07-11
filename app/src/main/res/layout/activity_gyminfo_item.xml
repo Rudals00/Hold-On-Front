@@ -4,4 +4,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/review_item_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/review_item_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:layout_marginRight="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <RatingBar
+                        android:id="@+id/review_item_ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="0.01"
+                        android:progressTint="#fe6f21"
+                        android:max="5"
+                        android:layout_gravity="center"
+                        style="@style/Widget.AppCompat.RatingBar.Small"/>
+
+                    <TextView
+                        android:id="@+id/review_item_rating"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:text="(5.0)"
+                        android:textSize="13dp"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/review_item_text"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="review text"
+                    android:textSize="20dp"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>

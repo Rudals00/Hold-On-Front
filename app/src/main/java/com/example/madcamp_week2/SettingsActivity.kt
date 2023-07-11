@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
@@ -20,9 +21,11 @@ import com.navercorp.nid.NaverIdLoginSDK
 
 class SettingsActivity : AppCompatActivity() {
     private val PICK_IMAGE_REQUEST = 101
+    private val SETTINGS_REQUEST_CODE = 102
     private lateinit var kakaoLogoutButton: Button
     private lateinit var kakaoUnlinkButton: Button
     private lateinit var addprofileImage : ImageView
+    private lateinit var selectedGrade: String //선택된 등급을 저장할 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,35 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        }
+
+        val gradeSpinner = findViewById<Spinner>(R.id.spinner_settings_grade)
+        val grade = arrayOf("Vb", "V0", "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10")
+        val gradeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, grade)
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        gradeSpinner.adapter = gradeAdapter
+
+        gradeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                selectedGrade = parent.getItemAtPosition(position).toString()
+                // 선택된 등급을 처리하는 로직을 여기에 작성하세요.
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 선택이 해제될 때의 처리 로직을 여기에 작성하세요.
+            }
+        }
+
+
+        //저장하기 버튼 클릭 이벤트 핸들러
+        val saveButton = findViewById<Button>(R.id.settings_save_button)
+        saveButton.setOnClickListener {
+
+            //fivefragment로 돌아가기 위한 결과 설정 및 종료
+            val resultIntent = Intent()
+            resultIntent.putExtra("selectedGrade", selectedGrade)
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
         }
 
         kakaoLogoutButton = findViewById(R.id.kakao_logout_button)

@@ -21,14 +21,31 @@ import com.example.madcamp_week2.databinding.FragmentOneBinding
 import com.example.madcamp_week2.databinding.FragmentTwoBinding
 import com.example.madcamp_week2.databinding.GroupRecyclerviewBinding
 import com.example.madcamp_week2.databinding.PostRecyclerviewBinding
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttp
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
+
+//user가 속한 crew정보를 담고있는 클래스
+data class CrewData(
+    val crew1: String,
+    val crew2: String,
+    val crew3: String,
+    val crew4: String,
+    val crew5: String
+    )
 
 data class Group(
     val area: String,
     val title: String,
     val maximmum: Int,
     var current: Int
-
-)
+    )
 interface OnGroupItemClickedListener {
     fun onGroupClick(group: Group)
 }
@@ -63,6 +80,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
     private var groupAdapter: GroupAdapter? = null
     private val PICK_IMAGE_REQUEST = 101
     private var user_ID: String = ""
+    private var crew_name: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +90,8 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
         groupAdapter = GroupAdapter(datas, this)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = groupAdapter
+
+        fetchCrewData()
 
         val areaSpinner: Spinner = binding.areaSpinner
         val areas = arrayOf("강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구",
@@ -164,6 +184,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
             }
             popupMenu.show()
         }
+        fetchGroupData()
 
         datas.add(Group("Area 1", "Title 1", 5, 2))
         datas.add(Group("Area 2", "Title 2", 10, 3))
@@ -172,6 +193,96 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
 
         return binding.root
     }
+
+    private fun fetchCrewData() {
+        val url = "http://172.10.5.168/crew/$user_ID"
+
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.run {
+
+            newCall(request).enqueue(object: Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    //요청 실패시 처리할 로직
+                }
+
+                override fun onResponse(call:Call, response: Response) {
+                    if(response.isSuccessful) {
+                        val responseData = response.body?.string()
+                        val crewData = parseCrewData(responseData)
+                    } else {
+                        //응답이 실패한 경우 처리할 로직
+                    }
+                }
+
+            })
+        }
+    }
+
+    private fun parseCrewData(responseData: String?): CrewData? {
+        try {
+            val jsonObject = JSONObject(responseData)
+            val crew1 = jsonObject.getString("crew1")
+            val crew2 = jsonObject.getString("crew2")
+            val crew3 = jsonObject.getString("crew3")
+            val crew4 = jsonObject.getString("crew4")
+            val crew5 = jsonObject.getString("crew5")
+
+            return CrewData(crew1, crew2, crew3, crew4, crew5)
+        } catch(e: JSONException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    private fun fetchGroupData() {
+        val url = "http://172.10.5.168/group/$crew_name"
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                //요청 실패시 처리할 로직을 작성하세요
+            }
+
+            override fun onResponse(call:Call, response: Response) {
+                if(response.isSuccessful) {
+                    val responseData = response.body?.string()
+                    val groupData = parseGroupData(responseData) //groupData에 Group형 하나 받아옴
+                    if(groupData!=null) {
+                        activity?.runOnUiThread {
+                            setGroupData(groupData)
+                        }
+                    }
+                } else {
+                    //응답이 실패한 경우 처리할 로직
+                }
+            }
+        })
+    }
+    private fun parseGroupData(responseData: String?): Group? {
+        try {
+            val jsonObject = JSONObject(responseData)
+            val crew_name = jsonObject.getString("crew_name")
+            val crew_district = jsonObject.getString("crew_district")
+            val max_member = jsonObject.getInt("max_member")
+            val num_member = jsonObject.getInt("num_member")
+
+            return Group(crew_district, crew_name, max_member, num_member)
+        } catch(e:JSONException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+    private fun setGroupData(Group: Group) {
+        binding.groupDatailName.text=Group.title
+    }
+
     override fun onGroupClick(group: Group) {
         binding.groupDatailName.text = group.title
         binding.groupInfo.visibility=View.VISIBLE

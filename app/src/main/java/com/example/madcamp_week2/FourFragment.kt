@@ -42,6 +42,7 @@ class FourFragment : Fragment() {
     private val longitudeDataset = ArrayList<Double>()
     private val ratingDataset = ArrayList<String>()
     private val imageDataset = ArrayList<String>()
+    private val districtDataset = ArrayList<String>() //gym_district 정보를 저장
     private var user_ID: String = ""
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
@@ -68,7 +69,7 @@ class FourFragment : Fragment() {
         areaSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val selectedArea = parent.getItemAtPosition(position).toString()
-                // 선택된 구를 처리하는 로직을 여기에 작성하세요.
+                filterDataByDistrict(selectedArea, rootView)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -78,6 +79,7 @@ class FourFragment : Fragment() {
         initUI(rootView)
         return rootView
     }
+
     fun setResponseData(userID: String) {
         // 받은 데이터를 처리하고 UI에 반영하는 로직을 작성하세요.
         this.user_ID = userID
@@ -119,14 +121,38 @@ class FourFragment : Fragment() {
                         val gymAddress = jsonObject.getString("gym_address")
                         val latitude = jsonObject.getDouble("latitude")
                         val longitude = jsonObject.getDouble("longitude")
+                        val gymDistrict = jsonObject.getString("gym_district")
+                        val gymRating = jsonObject.getDouble("rating")
 
                         gymIdDataset.add(gymId)
                         nameDataset.add(gymName)
                         locationDataset.add(gymAddress)
                         latitudeDataset.add(latitude)
                         longitudeDataset.add(longitude)
-                        ratingDataset.add("4.7") //이후 rating 받아와서 .add(rating.toString())
-                        imageDataset.add("@drawable/seoulforest_ts") //이후 이미지 받아와서 imagePath 추가
+                        ratingDataset.add(gymRating.toString())
+                        districtDataset.add(gymDistrict)
+
+                        if(i==0) {
+                            imageDataset.add("@drawable/seoulforest")
+                        }
+                        else if(i==1) {
+                            imageDataset.add("@drawable/allezclimbing")
+                        }
+                        else if(i==2) {
+                            imageDataset.add("@drawable/boulderfriends")
+                        }
+                        else if(i==3) {
+                            imageDataset.add("@drawable/theclimb")
+                        }
+                        else if(i==4) {
+                            imageDataset.add("@drawable/peakers")
+                        }
+                        else if(i==5) {
+                            imageDataset.add("@drawable/hookclimbing")
+                        }
+                        else if(i==6) {
+                            imageDataset.add("@drawable/theplastik")
+                        }
                     }
 
                     //ui 업데이트
@@ -156,21 +182,50 @@ class FourFragment : Fragment() {
                         Toast.makeText(requireContext(), "데이터를 파싱하는데 실패했습니다", Toast.LENGTH_SHORT).show()
                     }
                 }
+
+
             }
+
+
+
         })
 
-//        nameDataset.add("서울숲 뚝섬")
-//        nameDataset.add("PEAKERS 클라이밍 종로")
-//        nameDataset.add("락랜드")
-//        locationDataset.add("서울특별시 성동구 성수일로 19")
-//        locationDataset.add("서울특별시 종로구 돈화문로5가길 1")
-//        locationDataset.add("서울특별시 강북구 도봉로 315")
-//        ratingDataset.add("4.75")
-//        ratingDataset.add("4.5")
-//        ratingDataset.add("4.6")
-//        imageDataset.add("@drawable/seoulforest_ts")
-//        imageDataset.add("@drawable/peakers_guro")
-//        imageDataset.add("@drawable/rockland")
+    }
 
+    private fun filterDataByDistrict(selectedDistrict: String, rootView: View) {
+        val filteredGymIds = ArrayList<Int>()
+        val filteredNames = ArrayList<String>()
+        val filteredLocations = ArrayList<String>()
+        val filteredLatitudes = ArrayList<Double>()
+        val filteredLongitudes = ArrayList<Double>()
+        val filteredRatings = ArrayList<String>()
+        val filteredImages = ArrayList<String>()
+
+        for (i in 0 until gymIdDataset.size) {
+            if (districtDataset[i]==selectedDistrict) {
+                filteredGymIds.add(gymIdDataset[i])
+                filteredNames.add(nameDataset[i])
+                filteredLocations.add(locationDataset[i])
+                filteredLatitudes.add(latitudeDataset[i])
+                filteredLongitudes.add(longitudeDataset[i])
+                filteredRatings.add(ratingDataset[i])
+                filteredImages.add(imageDataset[i])
+            }
+        }
+
+        // 리사이클러뷰 및 어댑터에 필터링된 데이터 설정
+        val recyclerView = rootView.findViewById<RecyclerView>(R.id.fragfour_recyclerView)
+        val layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = layoutManager
+
+        val customAdapter = MapCustomAdapter(filteredGymIds, filteredNames, filteredLocations, filteredRatings, filteredImages, filteredLatitudes, filteredLongitudes)
+        recyclerView.adapter = customAdapter
+
+        customAdapter.setOnItemClickListener(object : MapCustomAdapter.OnItemClickListener {
+            override fun onItemClicked(position: Int, data: String) {
+                val intent = Intent(requireContext(), GymInfoActivity::class.java)
+                startActivity(intent)
+            }
+        })
     }
 }

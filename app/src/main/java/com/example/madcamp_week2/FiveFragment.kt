@@ -1,9 +1,14 @@
 package com.example.madcamp_week2
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -20,6 +25,11 @@ import java.io.IOException
 
 data class ProfileData(val profileImagePath: String, val nickname: String)
 class FiveFragment : Fragment() {
+    private val SETTINGS_REQUEST_CODE =102
+    private lateinit var selectedGrade: String
+    private lateinit var gradeTextView: TextView
+    private lateinit var nameTextView: TextView
+
     private lateinit var binding: FragmentFiveBinding
     private var user_ID: String = ""
     private var profileImageUri: String = ""
@@ -31,6 +41,18 @@ class FiveFragment : Fragment() {
     ): View {
         binding = FragmentFiveBinding.inflate(inflater, container, false)
 
+        binding.settingsButton.setOnClickListener {
+            val intent = Intent(requireContext(), SettingsActivity::class.java)
+            startActivityForResult(intent, SETTINGS_REQUEST_CODE)
+        }
+
+        val rootView = binding.root
+        gradeTextView = rootView.findViewById(R.id.fragfive_grade)
+        nameTextView = rootView.findViewById(R.id.fragfive_username)
+
+        nickname?.let {
+            binding.fragfiveUsername.text = it
+        }
         fetchProfileData()
 
         return binding.root
@@ -92,7 +114,16 @@ class FiveFragment : Fragment() {
     fun setResponseData(userID: String) {
         // 받은 데이터를 처리하고 UI에 반영하는 로직을 작성하세요.
         this.user_ID = userID
-        // 예시: TextView에 데이터를 설정하는 경우
-        // binding.textView.text = responseData
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                selectedGrade = data.getStringExtra("selectedGrade")?: ""
+            }
+            binding.fragfiveGrade.text = selectedGrade
+        }
+    }
+
 }

@@ -2,7 +2,10 @@ package com.example.madcamp_week2
 
 import android.app.Activity
 import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -12,12 +15,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import okhttp3.Call
 import okhttp3.Callback
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONObject
+import java.io.File
 import java.io.IOException
 
 
@@ -69,29 +77,29 @@ class joinmemberShipActivity : AppCompatActivity() {
     }
     private fun signUp() {
         val client = OkHttpClient()
-
-        // 사용자 정보를 가져옵니다.
         val ID = findViewById<EditText>(R.id.memberID).text.toString()
         val nickname = findViewById<EditText>(R.id.memberNickname).text.toString()
         val password = findViewById<EditText>(R.id.memberPassword).text.toString()
         val email = findViewById<EditText>(R.id.memberEmail).text.toString()
-        val imageUrl = imageUri // 이미지의 URL을 어떻게 가져올지 결정해야 합니다.
 
-        // JSON 데이터를 생성합니다.
-        val json = JSONObject()
-        json.put("ID",ID)
-        json.put("nickname", nickname)
-        json.put("password", password)
-        json.put("email", email)
-        json.put("imageUrl", imageUrl)
+        // 이미지 파일의 실제 경로를 가져옵니다.
+        val imagePath = getPathFromURI(Uri.parse(imageUri))
 
-        val mediaType = "application/json; charset=utf-8".toMediaType()
-        val body = json.toString().toRequestBody(mediaType)
+        // multipart/form-data 요청을 만듭니다.
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("ID", ID)
+            .addFormDataPart("nickname", nickname)
+            .addFormDataPart("password", password)
+            .addFormDataPart("email", email)
+            .addFormDataPart("image", "upload.jpg",
+                RequestBody.create("image/*jpg".toMediaTypeOrNull(), File(imagePath)))
+            .build()
 
         // POST 요청을 생성합니다.
         val request = Request.Builder()
             .url("http://172.10.5.168/signup") // 서버의 주소를 입력해주세요.
-            .post(body)
+            .post(requestBody)
             .build()
 
         // 요청을 비동기로 실행합니다.
@@ -119,5 +127,16 @@ class joinmemberShipActivity : AppCompatActivity() {
                 Log.d("SignUp", "Failed to send request: ${e.localizedMessage}")
             }
         })
+    }
+    fun getPathFromURI(uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+
+        this.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor.moveToFirst()
+            return cursor.getString(columnIndex)
+        }
+
+        return null
     }
 }

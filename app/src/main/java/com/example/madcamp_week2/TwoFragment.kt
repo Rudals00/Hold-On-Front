@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -140,8 +141,16 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
         }
         binding.addImage.setOnClickListener{
             val intent = Intent(Intent.ACTION_PICK)
+
             intent.type = "image/*"
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            val packageManager = requireContext().packageManager
+            val activities = packageManager.queryIntentActivities(intent, 0)
+            val isIntentSafe = activities.isNotEmpty()
+            if (isIntentSafe) {
+                startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            } else {
+                Toast.makeText(requireContext(), "No gallery app found.", Toast.LENGTH_SHORT).show()
+            }
         }
         binding.addButton.setOnClickListener{
             val popupMenu = PopupMenu(requireContext(), binding.addButton)

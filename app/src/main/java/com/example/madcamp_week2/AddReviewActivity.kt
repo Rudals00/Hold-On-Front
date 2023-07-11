@@ -39,10 +39,18 @@ class AddReviewActivity: AppCompatActivity() {
         val buttonRegister = findViewById<Button>(R.id.register_button)
         addReviewImg = findViewById(R.id.addReviewImg)
 
-        addReviewImg.setOnClickListener {
+        addReviewImg.setOnClickListener{
             val intent = Intent(Intent.ACTION_PICK)
+
             intent.type = "image/*"
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            val packageManager = packageManager
+            val activities = packageManager.queryIntentActivities(intent, 0)
+            val isIntentSafe = activities.isNotEmpty()
+            if (isIntentSafe) {
+                startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            } else {
+                Toast.makeText(this, "No gallery app found.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //등록하기 버튼에 클릭 리스너 설정

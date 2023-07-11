@@ -106,11 +106,11 @@ class PostDetailFragment : Fragment() {
         likeCount = binding.likeCountTextView
         commentRecyclerView = binding.commentRecyclerView
 
-        postText.text = post.postText
-        userNickname.text = post.userNickname
-        uploadTime.text = post.postUploadTime
-        commentCount.text = "답글 "+post.commentCount.toString()+"개"
-        likeCount.text = "·좋아요 " + post.likeCount.toString() + "개"
+        postText.text = post.post_text
+//        userNickname.text = post.userNickname
+//        uploadTime.text = post.postUploadTime
+//        commentCount.text = "답글 "+post.commentCount.toString()+"개"
+//        likeCount.text = "·좋아요 " + post.likeCount.toString() + "개"
 
         // Initialize image adapter and set to the RecyclerView
         imageAdapter = ImageAdapter1()
@@ -118,22 +118,22 @@ class PostDetailFragment : Fragment() {
         postImages.adapter = imageAdapter
 
         // Load images into RecyclerView
-        post.postImgPaths?.let {
-            if(it.isEmpty()) {
-                postImages.visibility = View.GONE
-            } else {
-                postImages.visibility = View.VISIBLE
-                imageAdapter.setImages(it)
-            }
-        } ?: run {
-            postImages.visibility = View.GONE
-        }
-        post.comments?.let {
-            val commentAdapter = CommentAdapter()
-            commentRecyclerView.layoutManager = LinearLayoutManager(context)
-            commentRecyclerView.adapter = commentAdapter
-            commentAdapter.setComments(it)
-        }
+//        post.postImgPaths?.let {
+//            if(it.isEmpty()) {
+//                postImages.visibility = View.GONE
+//            } else {
+//                postImages.visibility = View.VISIBLE
+//                imageAdapter.setImages(it)
+//            }
+//        } ?: run {
+//            postImages.visibility = View.GONE
+//        }
+//        post.comments?.let {
+//            val commentAdapter = CommentAdapter()
+//            commentRecyclerView.layoutManager = LinearLayoutManager(context)
+//            commentRecyclerView.adapter = commentAdapter
+//            commentAdapter.setComments(it)
+//        }
 
         // Set click listener for back button
         backButton.setOnClickListener {

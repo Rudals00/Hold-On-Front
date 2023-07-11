@@ -1,5 +1,6 @@
 package com.example.madcamp_week2
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,9 +80,10 @@ class FiveFragment : Fragment() {
 
     private fun setProfileData(profileData: ProfileData) {
         // 프로필 이미지 설정
+        Log.d("path",profileData.profileImagePath)
         Glide.with(this)
-            .load(profileData.profileImagePath)
-            .apply(RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
+            .load("http://172.10.5.168/"+profileData.profileImagePath)
+//            .apply(RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
             .into(binding.fragfiveUserprofile)
 
         // 닉네임 설정

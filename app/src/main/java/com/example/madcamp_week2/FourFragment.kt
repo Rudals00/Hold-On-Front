@@ -42,6 +42,7 @@ class FourFragment : Fragment() {
     private val longitudeDataset = ArrayList<Double>()
     private val ratingDataset = ArrayList<String>()
     private val imageDataset = ArrayList<String>()
+    private var user_ID: String = ""
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +78,12 @@ class FourFragment : Fragment() {
         initUI(rootView)
         return rootView
     }
-
+    fun setResponseData(userID: String) {
+        // 받은 데이터를 처리하고 UI에 반영하는 로직을 작성하세요.
+        this.user_ID = userID
+        // 예시: TextView에 데이터를 설정하는 경우
+        // binding.textView.text = responseData
+    }
     private fun initUI(rootView: View) {
         //서버 엔드포인트 url
         val url = "http://172.10.5.168/gymData"

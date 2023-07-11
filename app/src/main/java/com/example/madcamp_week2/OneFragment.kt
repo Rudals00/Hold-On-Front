@@ -197,6 +197,7 @@ class OneFragment : Fragment() {
     private lateinit var binding: FragmentOneBinding
     private var adapter: Myadapter? = null
     private var selectedCategory: String? = "all"
+    private var user_ID: String = ""
 
 
 
@@ -234,6 +235,12 @@ class OneFragment : Fragment() {
 
 
         return binding.root
+    }
+    fun setResponseData(userID: String) {
+        // 받은 데이터를 처리하고 UI에 반영하는 로직을 작성하세요.
+        this.user_ID = userID
+        // 예시: TextView에 데이터를 설정하는 경우
+        // binding.textView.text = responseData
     }
 
 

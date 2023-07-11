@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class SecondActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySecondBinding
+    private lateinit var ID: String
 
     class MyFragmentPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
@@ -45,10 +46,26 @@ class SecondActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun sendDataToFragment(fragment: Fragment) {
+        if (fragment is OneFragment) {
+            fragment.setResponseData(ID)
+        } else if (fragment is TwoFragment) {
+            fragment.setResponseData(ID)
+        } else if (fragment is ThreeFragment) {
+            fragment.setResponseData(ID)
+        } else if (fragment is FourFragment) {
+            fragment.setResponseData(ID)
+        } else if (fragment is FiveFragment) {
+            fragment.setResponseData(ID)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySecondBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ID = intent.getStringExtra("ID")?:""
 
 
         binding.viewpager.adapter = MyFragmentPagerAdapter(this)
@@ -57,5 +74,9 @@ class SecondActivity : AppCompatActivity() {
                 tab, position-> tabSetting(tab, position)
         }.attach()
 
+        val adapter = binding.viewpager.adapter as MyFragmentPagerAdapter
+        for (fragment in adapter.fragments) {
+            sendDataToFragment(fragment)
+        }
     }
 }

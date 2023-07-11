@@ -20,6 +20,7 @@ import com.kakao.sdk.user.UserApiClient
 class ThreeFragment : Fragment() {
     private lateinit var binding: FragmentThreeBinding
     private val PICK_IMAGE_REQUEST = 101
+    private var user_ID: String = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,6 +64,13 @@ class ThreeFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    fun setResponseData(userID: String) {
+        // 받은 데이터를 처리하고 UI에 반영하는 로직을 작성하세요.
+        this.user_ID = userID
+        // 예시: TextView에 데이터를 설정하는 경우
+        // binding.textView.text = responseData
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

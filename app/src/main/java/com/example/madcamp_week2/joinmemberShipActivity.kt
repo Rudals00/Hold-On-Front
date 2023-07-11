@@ -30,7 +30,7 @@ class joinmemberShipActivity : AppCompatActivity() {
         setContentView(R.layout.activity_joinmembership)
         val buttonJoin = findViewById<Button>(R.id.buttonJoin)
         addProfileImg = findViewById(R.id.addprofileImg)
-
+        val buttonlogin = findViewById<Button>(R.id.buttonlogin)
         addProfileImg.setOnClickListener{
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -41,6 +41,10 @@ class joinmemberShipActivity : AppCompatActivity() {
             signUp()
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent) // Intent를 사용하여 SecondActivity 시작
+        }
+        buttonlogin.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -59,6 +63,7 @@ class joinmemberShipActivity : AppCompatActivity() {
         val client = OkHttpClient()
 
         // 사용자 정보를 가져옵니다.
+        val ID = findViewById<EditText>(R.id.memberID).text.toString()
         val nickname = findViewById<EditText>(R.id.memberNickname).text.toString()
         val password = findViewById<EditText>(R.id.memberPassword).text.toString()
         val email = findViewById<EditText>(R.id.memberEmail).text.toString()
@@ -66,6 +71,7 @@ class joinmemberShipActivity : AppCompatActivity() {
 
         // JSON 데이터를 생성합니다.
         val json = JSONObject()
+        json.put("ID",ID)
         json.put("nickname", nickname)
         json.put("password", password)
         json.put("email", email)
@@ -88,6 +94,8 @@ class joinmemberShipActivity : AppCompatActivity() {
                     runOnUiThread {
                         Toast.makeText(this@joinmemberShipActivity, "Signup successful!", Toast.LENGTH_LONG).show()
                         val intent = Intent(this@joinmemberShipActivity, SecondActivity::class.java)
+                        intent.putExtra("ID", ID) // ID를 다음 액티비티로 전달
+                        startActivity(intent)
                         startActivity(intent) // 가입 성공 후 SecondActivity 시작
                     }
                 } else {

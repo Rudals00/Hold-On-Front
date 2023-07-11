@@ -35,6 +35,7 @@ import java.io.InputStreamReader
  * create an instance of this fragment.
  */
 class FourFragment : Fragment() {
+    private val gymIdDataset = ArrayList<Int>()
     private val nameDataset = ArrayList<String>()
     private val locationDataset = ArrayList<String>()
     private val latitudeDataset = ArrayList<Double>()
@@ -79,7 +80,7 @@ class FourFragment : Fragment() {
 
     private fun initUI(rootView: View) {
         //서버 엔드포인트 url
-        val url = "https://cc13-192-249-19-234.jp.ngrok.io/gymData"
+        val url = "http://172.10.5.168/gymData"
 
         //OkHttpClient 생성
         val client = OkHttpClient()
@@ -107,11 +108,13 @@ class FourFragment : Fragment() {
                     for(i in 0 until jsonArray.length()) {
                         val jsonObject = jsonArray.getJSONObject(i)
                         //필요한 데이터 추출
+                        val gymId = jsonObject.getInt("gym_id")
                         val gymName = jsonObject.getString("gym_name")
                         val gymAddress = jsonObject.getString("gym_address")
                         val latitude = jsonObject.getDouble("latitude")
                         val longitude = jsonObject.getDouble("longitude")
 
+                        gymIdDataset.add(gymId)
                         nameDataset.add(gymName)
                         locationDataset.add(gymAddress)
                         latitudeDataset.add(latitude)
@@ -130,7 +133,7 @@ class FourFragment : Fragment() {
                         //RatingBar 초기화
                         val ratingBar = rootView.findViewById<RatingBar>(R.id.ratingBar)
 
-                        val customAdapter = MapCustomAdapter(nameDataset, locationDataset, ratingDataset, imageDataset, latitudeDataset, longitudeDataset)
+                        val customAdapter = MapCustomAdapter(gymIdDataset, nameDataset, locationDataset, ratingDataset, imageDataset, latitudeDataset, longitudeDataset)
                         recyclerView.adapter = customAdapter
 
                         //click event implementation

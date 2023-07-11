@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.compose.ui.geometry.Offset
 
 class MapCustomAdapter(
+    private val gymIdDataSet: ArrayList<Int>,
     private val nameDataSet: ArrayList<String>,
     private val locationDataSet: ArrayList<String>,
     private val ratingDataSet: ArrayList<String>,
@@ -79,6 +80,7 @@ class MapCustomAdapter(
         val location = locationDataSet[position]
         holder.location.text = location
 
+        val gym_id = gymIdDataSet[position]
         val latitude = latitudeDataSet[position]
         val longitude = longitudeDataSet[position]
 
@@ -101,6 +103,7 @@ class MapCustomAdapter(
 
             val infoActivity = Intent(context, GymInfoActivity::class.java)
 
+            infoActivity.putExtra("gym_id", gym_id)
             infoActivity.putExtra("name", name)
             infoActivity.putExtra("location", location)
             infoActivity.putExtra("rating", ratingValue)

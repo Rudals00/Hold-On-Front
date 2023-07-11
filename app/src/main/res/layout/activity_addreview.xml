@@ -67,6 +67,7 @@
                 android:elevation="10dp">
 
                 <RatingBar
+                    android:id="@+id/review_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
@@ -101,6 +102,7 @@
                 android:elevation="10dp" >
 
                 <EditText
+                    android:id="@+id/review_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -121,6 +123,7 @@
         android:layout_margin="20dp">
 
         <Button
+            android:id="@+id/register_button"
             android:layout_width="120dp"
             android:layout_height="60dp"
             android:backgroundTint="#fe6f21"

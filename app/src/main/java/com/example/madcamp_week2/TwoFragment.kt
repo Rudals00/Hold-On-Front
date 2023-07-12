@@ -75,8 +75,9 @@ class GroupAdapter(private val datas:MutableList<Group>, private val listener: O
         val binding = (holder as TwoViewHolder).binding
         binding.groupTitle.text = datas[position].crew_name
         binding.area.text = datas[position].crew_district
-        binding.current.text = datas[position].num_member.toString()
+        binding.current.text = datas[position].num_member.toString()+"/"
         binding.maximum.text = datas[position].max_member.toString()
+        binding.explain.text = datas[position].explanation
 
         binding.GroupImage.clipToOutline = true
         Glide.with(holder.binding.root)

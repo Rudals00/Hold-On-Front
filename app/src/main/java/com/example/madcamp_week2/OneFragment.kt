@@ -218,31 +218,31 @@ class MyAdapter(
 //                    binding.likeCountTextView.text = datas[position].likeCount.toString()
 //                }
 //            }
-            holder.itemView.setOnClickListener {
-                val postDetailFragment = PostDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putParcelable("post", datas[position]) // Assuming `Post` is Parcelable.
-                    }
-                }
-
-                // PostDetailFragment의 생명주기를 관찰하여 리사이클러뷰의 가시성을 변경합니다.
-                postDetailFragment.lifecycle.addObserver(object : LifecycleObserver {
-                    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-                    fun onFragmentDestroyed() {
-                        fragmentOneBinding.recyclerView.visibility = View.VISIBLE
-                        fragmentOneBinding.fragmentContainer.visibility = View.GONE
-                    }
-                })
-
-                // 리사이클러뷰를 숨기고 프래그먼트를 변경합니다.
-                fragmentOneBinding.recyclerView.visibility = View.GONE
-                fragmentOneBinding.fragmentContainer.visibility = View.VISIBLE
-                activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, postDetailFragment)
-                    .addToBackStack(null)
-                    .commit()
-
-            }
+//            holder.itemView.setOnClickListener {
+//                val postDetailFragment = PostDetailFragment().apply {
+//                    arguments = Bundle().apply {
+//                        putParcelable("post", datas[position]) // Assuming `Post` is Parcelable.
+//                    }
+//                }
+//
+//                // PostDetailFragment의 생명주기를 관찰하여 리사이클러뷰의 가시성을 변경합니다.
+//                postDetailFragment.lifecycle.addObserver(object : LifecycleObserver {
+//                    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+//                    fun onFragmentDestroyed() {
+//                        fragmentOneBinding.recyclerView.visibility = View.VISIBLE
+//                        fragmentOneBinding.fragmentContainer.visibility = View.GONE
+//                    }
+//                })
+//
+//                // 리사이클러뷰를 숨기고 프래그먼트를 변경합니다.
+//                fragmentOneBinding.recyclerView.visibility = View.GONE
+//                fragmentOneBinding.fragmentContainer.visibility = View.VISIBLE
+//                activity.supportFragmentManager.beginTransaction()
+//                    .replace(R.id.fragment_container, postDetailFragment)
+//                    .addToBackStack(null)
+//                    .commit()
+//
+//            }
         }
     }
 

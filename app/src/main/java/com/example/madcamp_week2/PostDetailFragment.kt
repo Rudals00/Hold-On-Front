@@ -108,9 +108,9 @@ class PostDetailFragment : Fragment() {
 
         postText.text = post.post_text
 //        userNickname.text = post.userNickname
-//        uploadTime.text = post.postUploadTime
-//        commentCount.text = "답글 "+post.commentCount.toString()+"개"
-//        likeCount.text = "·좋아요 " + post.likeCount.toString() + "개"
+        uploadTime.text = post.postCreatedAt
+        commentCount.text = "답글 "+"30"+"개"
+        likeCount.text = "·좋아요 " + "29" + "개"
 
         // Initialize image adapter and set to the RecyclerView
         imageAdapter = ImageAdapter1()
@@ -118,7 +118,7 @@ class PostDetailFragment : Fragment() {
         postImages.adapter = imageAdapter
 
         // Load images into RecyclerView
-//        post.postImgPaths?.let {
+//        post.imag?.let {
 //            if(it.isEmpty()) {
 //                postImages.visibility = View.GONE
 //            } else {

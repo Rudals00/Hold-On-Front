@@ -263,7 +263,7 @@ class OneFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         // 데이터 로드
-        loadData()
+        loadData1()
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -309,6 +309,28 @@ class OneFragment : Fragment() {
         adapter?.datas?.addAll(posts)
         adapter?.notifyDataSetChanged()
     }
+    private fun updatePosts1(posts: List<Post>) {
+        // 받아온 게시물 리스트를 어댑터의 datas에 대입하여 업데이트하고 RecyclerView에 변경 내용을 반영
+        adapter?.datas?.clear()
+        adapter?.datas?.add(
+            Post(
+                0,
+                "0",
+                "UserNickname0",
+                "Category0",
+                "PostText0",
+                null,
+                null,
+                "UploadTime0",
+                null,
+                null,
+                null,
+                null
+            )
+        )// 로고를 위한 dummy data
+        adapter?.datas?.addAll(posts)
+        adapter?.notifyDataSetChanged()
+    }
 
     private fun loadData() {
         val client = OkHttpClient()
@@ -338,6 +360,35 @@ class OneFragment : Fragment() {
             }
         })
     }
+    private fun loadData1() {
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url("http://172.10.5.168/posts") // 게시물 데이터를 가져오는 API 엔드포인트 URL로 변경
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                // 요청 실패 시 처리할 로직을 작성하세요.
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                if (response.isSuccessful) {
+                    val responseData = response.body?.string()
+                    Log.d("Data1", "Response Data: $responseData")
+                    if (!responseData.isNullOrEmpty()) {
+                        val posts = parsePosts(responseData)
+                        activity?.runOnUiThread {
+                            updatePosts1(posts)
+                        }
+                    }
+                } else {
+                    // 응답이 실패한 경우 처리할 로직을 작성하세요.
+                }
+            }
+        })
+    }
+
 
     private fun parsePosts(responseData: String): List<Post> {
         // JSON 데이터를 파싱하여 게시물 리스트로 변환하는 로직을 작성하세요.

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.Toast
@@ -76,6 +77,8 @@ class GroupAdapter(private val datas:MutableList<Group>, private val listener: O
         binding.area.text = datas[position].crew_district
         binding.current.text = datas[position].num_member.toString()
         binding.maximum.text = datas[position].max_member.toString()
+
+        binding.GroupImage.clipToOutline = true
         Glide.with(holder.binding.root)
             .load("http://172.10.5.168/" + datas[position].crew_image_path)
             .into(binding.GroupImage)
@@ -235,6 +238,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
             if (uri != null) {
                 imageUri = uri
             }
+
             Glide.with(this)
                 .load(uri)
                 .into(binding.addImage)

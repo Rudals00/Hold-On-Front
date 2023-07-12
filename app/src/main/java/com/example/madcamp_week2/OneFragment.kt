@@ -71,8 +71,11 @@ class MyViewHolder(val binding: PostRecyclerviewBinding, var selectedCategory: S
     var imgAdapter: ImageAdapter? = null
     init {
         val layoutParams = imgRecyclerView.layoutParams
-        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+        val displayMetrics = Resources.getSystem().displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        layoutParams.width = screenWidth
         imgRecyclerView.layoutParams = layoutParams
+
         val itemDecoration = object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
@@ -82,7 +85,7 @@ class MyViewHolder(val binding: PostRecyclerviewBinding, var selectedCategory: S
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
                 outRect.right = 10 // 오른쪽 여백 설정
-                outRect.left = 10
+                outRect.left = 0
             }
         }
         imgRecyclerView.addItemDecoration(itemDecoration)
@@ -336,7 +339,6 @@ class OneFragment : Fragment() {
         })
     }
 
-    }
     private fun parsePosts(responseData: String): List<Post> {
         // JSON 데이터를 파싱하여 게시물 리스트로 변환하는 로직을 작성하세요.
         // 예시: Gson 라이브러리를 사용하여 JSON을 객체로 변환
@@ -346,4 +348,5 @@ class OneFragment : Fragment() {
 
         return posts
     }
+}
 

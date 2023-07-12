@@ -61,6 +61,7 @@ class ImageAdapter1 : RecyclerView.Adapter<ImageAdapter1.ImageViewHolder1>() {
 
     override fun onBindViewHolder(holder: ImageViewHolder1, position: Int) {
         Glide.with(holder.itemView.context).load(images[position]).into(holder.image)
+        holder.image.scaleType = ImageView.ScaleType.FIT_XY
     }
 
     override fun getItemCount(): Int = images.size

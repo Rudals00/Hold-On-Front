@@ -47,9 +47,6 @@ class JoinGroupFragment : Fragment() {
         binding.backButton.setOnClickListener {
             activity?.onBackPressed()
         }
-        binding.search.setOnClickListener{
-            //해당 이름의 그룹 보여주기
-        }
 
         val groups = listOf(
             Group("Location 1", "Group 1", 10, 5),

@@ -29,7 +29,7 @@
                         android:id="@+id/logo"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/logo"
+                        android:src="@drawable/holdon_logo_icon"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"

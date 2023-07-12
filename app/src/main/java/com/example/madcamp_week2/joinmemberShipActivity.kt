@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -38,7 +39,7 @@ class joinmemberShipActivity : AppCompatActivity() {
         setContentView(R.layout.activity_joinmembership)
         val buttonJoin = findViewById<Button>(R.id.buttonJoin)
         addProfileImg = findViewById(R.id.addprofileImg)
-        val buttonlogin = findViewById<Button>(R.id.buttonlogin)
+        val buttonlogin = findViewById<TextView>(R.id.buttonlogin)
         addProfileImg.setOnClickListener{
             val intent = Intent(Intent.ACTION_PICK)
 

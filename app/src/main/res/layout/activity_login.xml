@@ -4,47 +4,68 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/memberID"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="아이디을 입력해주세요"
-        android:inputType="textMultiLine"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_margin="10dp">
 
-        android:background="@drawable/round_back_groupabout"
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/holdon_logo_icon"
+            android:layout_margin="5dp"
+            />
 
-        />
-    <EditText
-        android:id="@+id/memberPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="비밀번호를 입력해주세요"
-        android:inputType="textPassword"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="50dp"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="로그인"
+            android:textSize="20sp" />
 
-        android:background="@drawable/round_back_groupabout"
-
-        />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_margin="20dp">
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/buttonJoin"
-            android:layout_width="120dp"
-            android:layout_height="60dp"
-            android:backgroundTint="#fe6f21"
-            android:text="로그인"
-            android:textSize="17sp" />
+        <EditText
+            android:id="@+id/memberID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="아이디을 입력해주세요"
+            android:inputType="textMultiLine"
+            android:background="@drawable/round_back_groupabout"
+            android:layout_margin="20dp"
+            />
+        <EditText
+            android:id="@+id/memberPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="비밀번호를 입력해주세요"
+            android:background="@drawable/round_back_groupabout"
+            android:inputType="textPassword"
+            android:layout_margin="20dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="20dp">
+
+            <Button
+                android:id="@+id/buttonJoin"
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:backgroundTint="#fe6f21"
+                android:text="로그인"
+                android:textSize="17sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

@@ -35,9 +35,9 @@ class ThreeFragment : Fragment() {
     ): View {
         binding = FragmentThreeBinding.inflate(inflater, container, false)
 
-        binding.backButton.setOnClickListener {
-            binding.inputPost.setText("")
-        }
+//        binding.backButton.setOnClickListener {
+//            binding.inputPost.setText("")
+//        }
 
         binding.galleryButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
@@ -71,7 +71,7 @@ class ThreeFragment : Fragment() {
         val categorySpinner: Spinner = binding.postCategorySpinner
         val category = arrayOf("일상", "자유", "질문")
         val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, category)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         categorySpinner.adapter = adapter
 
         categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

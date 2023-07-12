@@ -13,18 +13,13 @@
         android:orientation="horizontal"
         android:gravity="center" >
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="20dp"
-            android:layout_height="30dp"
-            android:adjustViewBounds="true"
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:text="프로필"
+            android:textSize="25sp"
+            android:gravity="center" />
 
-            />
-
-        <View
-            android:layout_width="30dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <ImageButton
             android:id="@+id/settings_button"

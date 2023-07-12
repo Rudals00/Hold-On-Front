@@ -1,5 +1,7 @@
 package com.example.madcamp_week2
 
+import android.content.res.Resources
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.ContactsContract.CommonDataKinds.Nickname
@@ -33,7 +35,24 @@ data class Comment(
     val userNickname: String,
     val commentText: String
 ) : Parcelable
-
+private class SpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+        outRect.right = spacing // 오른쪽 여백 설정
+        if (parent.getChildAdapterPosition(view) != parent.adapter?.itemCount?.minus(1)) {
+            outRect.left = spacing // 왼쪽 여백 설정 (마지막 아이템 제외)
+        }
+    }
+}
+private fun dpToPx(dp: Int): Int {
+    val density = Resources.getSystem().displayMetrics.density
+    return (dp * density).toInt()
+}
 @Parcelize
 data class Post(
     val postId: Int,
@@ -54,6 +73,24 @@ class MyViewHolder(val binding: PostRecyclerviewBinding, var selectedCategory: S
     RecyclerView.ViewHolder(binding.root) {
     val imgRecyclerView: RecyclerView = binding.innerRecyclerView
     var imgAdapter: ImageAdapter? = null
+    init {
+        val layoutParams = imgRecyclerView.layoutParams
+        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+        imgRecyclerView.layoutParams = layoutParams
+        val itemDecoration = object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                super.getItemOffsets(outRect, view, parent, state)
+                outRect.right = 10 // 오른쪽 여백 설정
+                outRect.left = 10
+            }
+        }
+        imgRecyclerView.addItemDecoration(itemDecoration)
+    }
 }
 
 class ImageAdapter(private val imgPaths: List<String>?) :
@@ -153,7 +190,10 @@ class MyAdapter(
                     holder.itemView.context,
                     LinearLayoutManager.HORIZONTAL,
                     false
-                )
+                ).apply {
+                    val spacing = dpToPx(10) // 이미지 간격을 10dp로 설정 (원하는 값으로 변경하세요)
+                    holder.imgRecyclerView.addItemDecoration(SpacingItemDecoration(spacing))
+                }
                 holder.imgRecyclerView.adapter = holder.imgAdapter
             }
 //            binding.userNickname.text =datas[position].userNickname
@@ -301,6 +341,7 @@ class OneFragment : Fragment() {
         })
     }
 
+    }
     private fun parsePosts(responseData: String): List<Post> {
         // JSON 데이터를 파싱하여 게시물 리스트로 변환하는 로직을 작성하세요.
         // 예시: Gson 라이브러리를 사용하여 JSON을 객체로 변환
@@ -310,4 +351,4 @@ class OneFragment : Fragment() {
 
         return posts
     }
-}
+

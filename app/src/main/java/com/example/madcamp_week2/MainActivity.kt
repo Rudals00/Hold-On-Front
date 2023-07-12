@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val naverClientSecret = getString(R.string.social_login_info_naver_client_secret)
         val naverClientName = getString(R.string.social_login_info_naver_client_name)
         NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret,naverClientName)
-        val naver_login_button = findViewById<ImageButton>(R.id.kakao_login_button3)
+        val naver_login_button = findViewById<ImageButton>(R.id.naver_login_button)
         naver_login_button.setOnClickListener {
             Log.d("chchch","naver!!")
             startNaverLogin()

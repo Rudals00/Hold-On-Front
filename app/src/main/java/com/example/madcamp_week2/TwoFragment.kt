@@ -99,7 +99,11 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
     private var user_ID: String = ""
     private var crew_name: String = ""
     private lateinit var imageUri: Uri
-
+    override fun onResume() {
+        super.onResume()
+        // 데이터 로드
+        fetchGroupData()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -109,7 +113,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = groupAdapter
 
-        fetchCrewData()
+//        fetchCrewData()
 
         val areaSpinner: Spinner = binding.areaSpinner
         val areas = arrayOf("강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구",

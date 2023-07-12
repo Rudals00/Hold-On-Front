@@ -95,24 +95,28 @@
 
 ### Tab 4 - 지도
 <p>
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/274ccc61-ab3b-410e-a2d7-fad89a3e08f3" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/85a4fba3-01fc-4675-a6cf-df217cdd0d0b" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/8c1de43a-d616-4efb-a742-849ded395e97" height="32%" width="32%">
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/bdc94221-0417-41f0-a9a3-98b5ba820af6" height="32%" width="32%">
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/a1e261ee-c53b-4f88-bb46-dc0ef2efab73" height="32%" width="32%">
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/f0903c3e-64ff-453b-a1e8-a960a51bed88" height="32%" width="32%">
   <br><br><br>
 </p>
 
 #### 기능 설명
-- 프로그램의 drawable폴더에 저장된 20개의 이미지를 RecyclerView의 GridLayoutManager를 활용해 한 행에 3개씩 보여주는 갤러리 화면이다.
-- 각각의 사진을 클릭하면 사진 원본을 보여주는 새로운 Activity로 이동한다. PhotoView 라이브러리를 사용해 해당 이미지를 두 손가락으로 확대 및 축소할 수 있도록 구현하였다.
+- 서울시 클라이밍장에 대한 정보를 제공한다.
+- 검색 필터를 통해 지역별 암장에 대한 정보만 따로 볼 수 있도록 구현하였다.
+- 상세 페이지에서는 클라이밍센터 사진, 이름, 주소와 방문자 리뷰를 제공한다.
+- 리뷰 등록 버튼을 통해 리뷰를 등록할 수 있다.
+
+#### 아쉬운 점
+- 카카오맵 api를 활용해 지도에 위치정보를 표시할 수 있도록 하고싶었으나 구현하지 못한 것이 아쉽다.
 
 ***
 
 ### Tab 5 - 프로필
 <p>
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/274ccc61-ab3b-410e-a2d7-fad89a3e08f3" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/85a4fba3-01fc-4675-a6cf-df217cdd0d0b" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/8c1de43a-d616-4efb-a742-849ded395e97" height="32%" width="32%">
-  <br><br><br>
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/f90a7766-1141-4469-807b-e85816c0aa29" height="32%" width="32%">
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/5809b0b0-47d5-4fae-8291-47191facf8ed" height="32%" width="32%">
+  <br><br>
 </p>
 
 #### 기능 설명

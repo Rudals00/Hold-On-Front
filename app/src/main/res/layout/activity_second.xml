@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:elevation="20dp"
         android:layout_gravity="bottom"
-        android:background="#F1F8FF"
+        android:background="#fe6f21"
 
         >
     </com.google.android.material.tabs.TabLayout>

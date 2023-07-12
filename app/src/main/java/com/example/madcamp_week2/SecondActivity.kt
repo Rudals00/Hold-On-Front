@@ -29,20 +29,20 @@ class SecondActivity : AppCompatActivity() {
 
     fun tabSetting(tab: TabLayout.Tab, position: Int) {
         if (position == 0) {
-            tab.text = "Tab1"
-            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+            tab.text = "Post"
+            tab.setIcon(R.drawable.dashboard_icon)
         } else if (position == 1) {
-            tab.text = "Tab2"
-            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+            tab.text = "Crew"
+            tab.setIcon(R.drawable.frag5_crew_icon)
         } else if (position ==2){
-            tab.text = "Tab3"
-            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+            tab.text = "Add"
+            tab.setIcon(R.drawable.add_icon)
         }else if (position ==3) {
-            tab.text = "Tab4"
-            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+            tab.text = "Map"
+            tab.setIcon(R.drawable.map_icon)
         }else{
-            tab.text = "Tab5"
-            tab.setIcon(R.drawable.kakao_login_medium_narrow)
+            tab.text = "My"
+            tab.setIcon(R.drawable.profile_icon)
         }
 
     }

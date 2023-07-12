@@ -25,6 +25,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var kakaoLogoutButton: Button
     private lateinit var kakaoUnlinkButton: Button
     private lateinit var addprofileImage : ImageView
+    private lateinit var selectedCrew: String
     private lateinit var selectedGrade: String //선택된 등급을 저장할 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,15 +34,15 @@ class SettingsActivity : AppCompatActivity() {
 
         val rootView = layoutInflater.inflate(R.layout.activity_settings, null)
 
-        val crewSpinner = rootView.findViewById<Spinner>(R.id.spinner_settings_crew)
-        val crews = arrayOf("group1", "group2", "group3")
+        val crewSpinner = findViewById<Spinner>(R.id.spinner_settings_crew)
+        val crews = arrayOf("북한산 클라이밍 정상 도전", "에베레스트를 위하여", "클라이머 선수 도전기", "돌잡이")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, crews)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         crewSpinner.adapter = adapter
 
         crewSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedGroup = parent.getItemAtPosition(position).toString()
+                selectedCrew = parent.getItemAtPosition(position).toString()
                 // 선택된 그룹을 처리하는 로직을 여기에 작성하세요.
             }
 
@@ -80,6 +81,7 @@ class SettingsActivity : AppCompatActivity() {
 
             //fivefragment로 돌아가기 위한 결과 설정 및 종료
             val resultIntent = Intent()
+            resultIntent.putExtra("selectedCrew", selectedCrew)
             resultIntent.putExtra("selectedGrade", selectedGrade)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()

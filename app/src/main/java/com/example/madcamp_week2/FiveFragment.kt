@@ -26,9 +26,11 @@ import java.io.IOException
 data class ProfileData(val profileImagePath: String, val nickname: String)
 class FiveFragment : Fragment() {
     private val SETTINGS_REQUEST_CODE =102
+    private lateinit var selectedCrew: String
     private lateinit var selectedGrade: String
     private lateinit var gradeTextView: TextView
     private lateinit var nameTextView: TextView
+    private lateinit var crewTextView: TextView
 
     private lateinit var binding: FragmentFiveBinding
     private var user_ID: String = ""
@@ -47,6 +49,7 @@ class FiveFragment : Fragment() {
         }
 
         val rootView = binding.root
+        crewTextView = rootView.findViewById(R.id.fragfive_crew)
         gradeTextView = rootView.findViewById(R.id.fragfive_grade)
         nameTextView = rootView.findViewById(R.id.fragfive_username)
 
@@ -121,8 +124,10 @@ class FiveFragment : Fragment() {
         if (requestCode == SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 selectedGrade = data.getStringExtra("selectedGrade")?: ""
+                selectedCrew = data.getStringExtra("selectedCrew")?:""
             }
             binding.fragfiveGrade.text = selectedGrade
+            binding.fragfiveCrew.text = selectedCrew
         }
     }
 

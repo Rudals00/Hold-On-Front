@@ -80,7 +80,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
                 android:id="@+id/fragfive_userprofile"
-                android:src="@drawable/empty_profile" />
+                android:src="@drawable/empty_profile"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="5dp"/>
 
         </LinearLayout>
 

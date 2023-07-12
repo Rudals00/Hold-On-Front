@@ -25,10 +25,10 @@ class GroupAdapter1(private val groups: List<Group>) : RecyclerView.Adapter<Grou
         val group = groups[position]
         val binding = (holder as GroupViewHolder1).binding
         // Bind data to views here
-        binding.areaTextView.text = group.area
-        binding.titleTextView.text = group.title
-        binding.maximumTextView.text = "최대 인원: ${group.maximmum}"
-        binding.currentTextView.text = "현재 인원: ${group.current}"
+//        binding.areaTextView.text = group.area
+//        binding.titleTextView.text = group.title
+//        binding.maximumTextView.text = "최대 인원: ${group.maximmum}"
+//        binding.currentTextView.text = "현재 인원: ${group.current}"
     }
 
     override fun getItemCount(): Int = groups.size
@@ -48,14 +48,14 @@ class JoinGroupFragment : Fragment() {
             activity?.onBackPressed()
         }
 
-        val groups = listOf(
-            Group("Location 1", "Group 1", 10, 5),
-            Group("Location 2", "Group 2", 8, 3),
-            Group("Location 3", "Group 3", 6, 2)
-        )
-        val groupAdapter = GroupAdapter1(groups)
+//        val groups = listOf(
+//            Group("Location 1", "Group 1", 10, 5),
+//            Group("Location 2", "Group 2", 8, 3),
+//            Group("Location 3", "Group 3", 6, 2)
+//        )
+//        val groupAdapter = GroupAdapter1(groups)
         groupRecyclerView.layoutManager = LinearLayoutManager(context)
-        groupRecyclerView.adapter = groupAdapter
+//        groupRecyclerView.adapter = groupAdapter
 
         val areaSpinner: Spinner = binding.groupAreaSpinner
         val areas = arrayOf("전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구",

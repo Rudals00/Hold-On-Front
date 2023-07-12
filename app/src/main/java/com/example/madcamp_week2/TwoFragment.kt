@@ -2,6 +2,7 @@ package com.example.madcamp_week2
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,18 +18,25 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.madcamp_week2.databinding.FragmentOneBinding
 import com.example.madcamp_week2.databinding.FragmentTwoBinding
 import com.example.madcamp_week2.databinding.GroupRecyclerviewBinding
 import com.example.madcamp_week2.databinding.PostRecyclerviewBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.Call
 import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttp
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
 import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
 import java.io.IOException
 
 //user가 속한 crew정보를 담고있는 클래스
@@ -41,13 +49,18 @@ data class CrewData(
     )
 
 data class Group(
-    val area: String,
-    val title: String,
-    val maximmum: Int,
-    var current: Int
-    )
+    val crew_id: Int,
+    val crew_name: String,
+    val crew_district: String,
+    val max_member: Int,
+    val num_member: Int,
+    val notice: String?,
+    val explanation: String?,
+    val crew_image_path: String?
+)
 interface OnGroupItemClickedListener {
     fun onGroupClick(group: Group)
+
 }
 class TwoViewHolder(val binding: GroupRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -59,10 +72,14 @@ class GroupAdapter(private val datas:MutableList<Group>, private val listener: O
 
     override fun onBindViewHolder(holder: TwoViewHolder, position: Int) {
         val binding = (holder as TwoViewHolder).binding
-        binding.groupTitle.text = datas[position].title
-        binding.area.text = datas[position].area
-        binding.current.text = datas[position].current.toString()+"/"
-        binding.maximum.text = datas[position].maximmum.toString()
+        binding.groupTitle.text = datas[position].crew_name
+        binding.area.text = datas[position].crew_district
+        binding.current.text = datas[position].num_member.toString()
+        binding.maximum.text = datas[position].max_member.toString()
+        Glide.with(holder.binding.root)
+            .load("http://172.10.5.168/" + datas[position].crew_image_path)
+            .into(binding.GroupImage)
+
 
 
         holder.itemView.setOnClickListener {
@@ -81,6 +98,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
     private val PICK_IMAGE_REQUEST = 101
     private var user_ID: String = ""
     private var crew_name: String = ""
+    private lateinit var imageUri: Uri
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -146,10 +164,27 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
             binding.addButton.visibility=View.VISIBLE
         }
         binding.addImage.setOnClickListener{
-            //갤러리에서 이미지 uri받아오기
+            val intent = Intent(Intent.ACTION_PICK)
+
+            intent.type = "image/*"
+            val packageManager = requireContext().packageManager
+            val activities = packageManager.queryIntentActivities(intent, 0)
+            val isIntentSafe = activities.isNotEmpty()
+            if (isIntentSafe) {
+                startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            } else {
+                Toast.makeText(requireContext(), "No gallery app found.", Toast.LENGTH_SHORT).show()
+            }
         }
+
         binding.complete.setOnClickListener{
             // 완료누르면 정보들 group database에 넣기
+            val group_text = binding.groupAboutText.text.toString()
+            val group_name = binding.groupNameText.text.toString()
+            val group_area = binding.areaSpinner.selectedItem.toString()
+            val group_maximum = binding.maximumSpinner.selectedItem.toString().toInt()
+
+            uploadGroup(group_text, group_name, group_area,group_maximum)
             binding.groupNameText.setText("")
             binding.groupAboutText.setText("")
             binding.areaSpinner.setSelection(0)
@@ -186,12 +221,64 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
         }
         fetchGroupData()
 
-        datas.add(Group("Area 1", "Title 1", 5, 2))
-        datas.add(Group("Area 2", "Title 2", 10, 3))
-        datas.add(Group("Area 3", "Title 3", 8, 7))
-        datas.add(Group("Area 4", "Title 4", 12, 6))
 
         return binding.root
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val uri = data.data
+            if (uri != null) {
+                imageUri = uri
+            }
+            Glide.with(this)
+                .load(uri)
+                .into(binding.addImage)
+            // Here you can use the uri to create a File object, open an input stream, etc.
+            // ...
+        }
+    }
+
+
+    private fun uploadGroup(explanation: String, crew_name: String, district: String, group_maximum: Int) {
+        val client = OkHttpClient()
+
+        val requestBodyBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+        requestBodyBuilder.addFormDataPart("crew_name", crew_name)
+        requestBodyBuilder.addFormDataPart("crew_district", district)
+        requestBodyBuilder.addFormDataPart("max_member", group_maximum.toString())
+        requestBodyBuilder.addFormDataPart("explanation", explanation)
+
+        val imagePath = getPathFromURI(imageUri)
+        if (imagePath != null) {
+            val file = File(imagePath)
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+            requestBodyBuilder.addFormDataPart("crew_image_path", file.name, requestFile)
+        }
+
+        val requestBody = requestBodyBuilder.build()
+
+        val request = Request.Builder()
+            .url("http://172.10.5.168/uploadCrew") // Update with your server address
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle request failure
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(requireContext(), "Crew Make successfully", Toast.LENGTH_SHORT).show()
+                        // Clear input fields or perform any other UI updates
+                    }
+                } else {
+                    // Handle unsuccessful response
+                }
+            }
+        })
     }
 
     private fun fetchCrewData() {
@@ -239,52 +326,50 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
     }
 
     private fun fetchGroupData() {
-        val url = "http://172.10.5.168/group/$crew_name"
+        val url = "http://172.10.5.168/group/"
+
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(url)
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                //요청 실패시 처리할 로직을 작성하세요
+                // 요청 실패시 처리할 로직을 작성하세요
             }
 
-            override fun onResponse(call:Call, response: Response) {
-                if(response.isSuccessful) {
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
                     val responseData = response.body?.string()
-                    val groupData = parseGroupData(responseData) //groupData에 Group형 하나 받아옴
-                    if(groupData!=null) {
+                    val groupDataList = parseGroupData(responseData) // 그룹 데이터 리스트를 받아옴
+                    if (groupDataList != null) {
                         activity?.runOnUiThread {
-                            setGroupData(groupData)
+                            updateGroupDataList(groupDataList)
                         }
                     }
                 } else {
-                    //응답이 실패한 경우 처리할 로직
+                    // 응답이 실패한 경우 처리할 로직
                 }
             }
         })
     }
-    private fun parseGroupData(responseData: String?): Group? {
-        try {
-            val jsonObject = JSONObject(responseData)
-            val crew_name = jsonObject.getString("crew_name")
-            val crew_district = jsonObject.getString("crew_district")
-            val max_member = jsonObject.getInt("max_member")
-            val num_member = jsonObject.getInt("num_member")
 
-            return Group(crew_district, crew_name, max_member, num_member)
-        } catch(e:JSONException) {
-            e.printStackTrace()
-        }
-        return null
+    private fun parseGroupData(responseData: String?): List<Group>? {
+        val gson = Gson()
+        return gson.fromJson(responseData, object : TypeToken<List<Group>>() {}.type)
+    }
+
+    private fun updateGroupDataList(groupDataList: List<Group>) {
+        datas.clear()
+        datas.addAll(groupDataList)
+        groupAdapter?.notifyDataSetChanged()
     }
     private fun setGroupData(Group: Group) {
-        binding.groupDatailName.text=Group.title
+        binding.groupDatailName.text=Group.crew_name
     }
 
     override fun onGroupClick(group: Group) {
-        binding.groupDatailName.text = group.title
+        binding.groupDatailName.text = group.crew_name
         binding.groupInfo.visibility=View.VISIBLE
         binding.makeGroup.visibility=View.GONE
         binding.toolbar.visibility=View.GONE
@@ -323,14 +408,17 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
             }
         })
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-            val uri = data.data
 
-            // Here you can use the uri to create a File object, open an input stream, etc.
-            // ...
+
+    private fun getPathFromURI(uri: Uri): String? {
+        val projection = arrayOf(android.provider.MediaStore.Images.Media.DATA)
+        val cursor = requireContext().contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            val columnIndex = it.getColumnIndexOrThrow(android.provider.MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            return it.getString(columnIndex)
         }
+        return null
     }
     private fun makeGroup() {
         binding.makeGroup.visibility=View.VISIBLE
@@ -338,4 +426,7 @@ class TwoFragment : Fragment(), OnGroupItemClickedListener{
         binding.recyclerView.visibility=View.GONE
         binding.addButton.visibility=View.GONE
     }
+
+
+
 }

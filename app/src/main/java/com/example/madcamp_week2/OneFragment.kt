@@ -49,10 +49,6 @@ private class SpacingItemDecoration(private val spacing: Int) : RecyclerView.Ite
         }
     }
 }
-private fun dpToPx(dp: Int): Int {
-    val density = Resources.getSystem().displayMetrics.density
-    return (dp * density).toInt()
-}
 @Parcelize
 data class Post(
     val postId: Int,
@@ -190,10 +186,7 @@ class MyAdapter(
                     holder.itemView.context,
                     LinearLayoutManager.HORIZONTAL,
                     false
-                ).apply {
-                    val spacing = dpToPx(10) // 이미지 간격을 10dp로 설정 (원하는 값으로 변경하세요)
-                    holder.imgRecyclerView.addItemDecoration(SpacingItemDecoration(spacing))
-                }
+                )
                 holder.imgRecyclerView.adapter = holder.imgAdapter
             }
 //            binding.userNickname.text =datas[position].userNickname
@@ -264,10 +257,13 @@ class OneFragment : Fragment() {
     private var adapter: MyAdapter? = null
     private var selectedCategory: String? = "all"
     private var user_ID: String = ""
-
+    override fun onResume() {
+        super.onResume()
+        // 데이터 로드
+        loadData()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadData()
     }
 
     override fun onCreateView(
@@ -294,7 +290,6 @@ class OneFragment : Fragment() {
                 null
             )
         )// 로고를 위한 dummy data
-
         return binding.root
     }
 

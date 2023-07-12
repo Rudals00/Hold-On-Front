@@ -83,10 +83,8 @@
 
 ### Tab 3 - 글 작성
 <p>
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/274ccc61-ab3b-410e-a2d7-fad89a3e08f3" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/85a4fba3-01fc-4675-a6cf-df217cdd0d0b" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/8c1de43a-d616-4efb-a742-849ded395e97" height="32%" width="32%">
-  <br><br><br>
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/35817199-1f7e-4082-a84d-99e15b58ffd9" height="32%" width="32%">
+  <br>
 </p>
 
 #### 기능 설명

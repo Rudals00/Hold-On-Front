@@ -51,10 +51,9 @@
 
 ### Tab 1 - 게시판
 <p>
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/274ccc61-ab3b-410e-a2d7-fad89a3e08f3" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/85a4fba3-01fc-4675-a6cf-df217cdd0d0b" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/8c1de43a-d616-4efb-a742-849ded395e97" height="32%" width="32%">
-  <br><br><br>
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/6227bfbd-1390-4a27-8da8-8bf2b6b81328" height="32%" width="32%">
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/544c96ed-6414-42d4-bedb-ec0d389f7565" height="32%" width="32%">
+  <br><br>
 </p>
 
 #### 기능 설명
@@ -68,9 +67,9 @@
 
 ### Tab 2 - 크루
 <p>
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/274ccc61-ab3b-410e-a2d7-fad89a3e08f3" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/85a4fba3-01fc-4675-a6cf-df217cdd0d0b" height="32%" width="32%">
-  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/8c1de43a-d616-4efb-a742-849ded395e97" height="32%" width="32%">
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/9f80f7fb-6dec-4eb6-9b15-880c38c4ed21" height="32%" width="32%">
+  <img src="https://github.com/Naeunnkim/madcamp_week1/assets/128071056/cc1ffeb8-5834-4c92-ba3b-b8e288b81713" height="32%" width="32%">
+  <img src="[https://github.com/Naeunnkim/madcamp_week1/assets/128071056/8c1de43a-d616-4efb-a742-849ded395e97](https://github.com/Naeunnkim/madcamp_week1/assets/128071056/69f40b8d-b073-43de-8e25-8c43c501ee96)" height="32%" width="32%">
   <br><br><br>
 </p>
 

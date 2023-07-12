@@ -58,32 +58,11 @@ class GymInfoActivity: AppCompatActivity() {
         }
 
         if (gymimage != null) {
-            if(gymimage.isNotEmpty()) {
+            if (gymimage.isNotEmpty()) {
                 val id = resources.getIdentifier(gymimage, "drawable", packageName)
                 info_gymimage.setImageResource(id)
             }
         }
-
-//        webView  = findViewById(R.id.info_mapview)
-//        webView.webViewClient = WebViewClient()
-//        val webSettings: WebSettings = webView.settings
-//        webSettings.javaScriptEnabled = true
-//        webView.loadUrl("https://map.kakao.com/")
-
-        val latitude = gymlatitude
-        val longitude = gymlongitude
-
-//        //지도 중심 좌표 설정
-//        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude), true)
-//
-//        //마커 추가
-//        val marker = MapPOIItem()
-//        marker.itemName = gymname
-//        marker.tag=0
-//        marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude, longitude)
-//        marker.markerType = MapPOIItem.MarkerType.BluePin
-//        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-//        mapView.addPOIItem(marker)
 
         //리뷰 리사이클러뷰 설정
         recyclerView = findViewById(R.id.info_recyclerview)

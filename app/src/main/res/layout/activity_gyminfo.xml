@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center"
             >
 
             <ImageView
@@ -40,12 +41,10 @@
                 android:textSize="15dp"
                 android:gravity="center" />
 
-            <net.daum.mf.map.api.MapView
-                android:id="@+id/info_mapview"
+            <ImageView
                 android:layout_width="300dp"
                 android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"/>
+                android:src="@drawable/seoulforest_map" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="400dp"

@@ -19,7 +19,7 @@
 
 ## 개발 환경
 - OS: Android(minSdk:21, targetSdk:31)
-- Language: Java
+- Language: Kotlin
 - IDE: Android Studio
 - Server: Node.js
 - Database: MySQL
